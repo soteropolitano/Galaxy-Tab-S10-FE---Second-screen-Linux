@@ -1,49 +1,27 @@
-# Etapa 07: S Pen, touch, USB e documentação
+# Etapa 07: S Pen, touch e USB
 
-Data: 21/10/2026.
+21/10/2026
 
-Depois da primeira imagem, ampliei o objetivo: quero a S Pen e o touch funcionando, além da opção USB. Estudei os links reunidos em [referências](../referencias.md), incluindo documentação, trechos do código e relatos de uso.
+Depois de conseguir imagem, fui olhar como outros projetos tratam a caneta, o touch e a conexão por cabo. Quero essas partes funcionando também, então reuni os links em [referências](../referencias.md) e comecei a estudar documentação, código e relatos de uso.
 
-Esta etapa foi de estudo e preparação da documentação. Não instalei os projetos nem fiz outro teste com o tablet.
-
-## A principal referência
-
-O UScreen reúne o caminho mais próximo do objetivo no KDE Wayland:
+O UScreen foi o que mais se aproximou do que procuro para KDE Wayland. Ele cria uma tela com EVDI, transmite o vídeo para um aplicativo Android e devolve os dados de entrada ao Linux:
 
 ```text
-KDE -> tela virtual EVDI -> captura -> H.264 -> ADB/USB -> app Android
+KDE -> EVDI -> captura/H.264 -> ADB/USB -> aplicativo Android
 
-Caneta e dedos -> eventos Android -> canal de entrada
-              -> uinput -> KDE -> aplicativo
+Caneta e dedos -> Android -> canal de entrada -> uinput -> KDE
 ```
 
-No cliente Android, encontrei a leitura de pressão, inclinação, orientação, aproximação e botão. No computador, encontrei dispositivos separados para caneta e touch, com eixos de pressão/inclinação e contatos de toque.
+Encontrei no cliente Android a leitura de pressão, inclinação, orientação, aproximação e botão. No Linux, há dispositivos separados para caneta e touch e um mapeamento pelo KWin para mandar a entrada à tela correta.
 
-O código também faz a associação desses dispositivos à saída correta pelo KWin. Isso importa porque o computador usa monitores com escalas diferentes.
+Há também um relato positivo de S10 FE+ no KDE, com a confirmação do botão depois de uma correção na versão 1.2.8. Ainda falta testar no meu S10 FE.
 
-Há um relato positivo com S10 FE+ e KDE, incluindo a confirmação do botão após a versão 1.2.8. Ainda falta validar o meu S10 FE e a GPU deste computador.
+Os outros projetos ajudaram a entender as diferenças. O TethrLink usa rede por USB, mas a entrada depende do GNOME e emula ponteiro. O arch-galaxytab-submonitor usa Sunshine/Moonlight e registra caneta e touch como não verificados. Já o Second-Screen-Samsung-Linux transmite MJPEG para uma página que, no código lido, não envia entrada de volta.
 
-## O que os outros projetos acrescentaram
+Os projetos com XRandR e VNC ficam como referência para organizar telas. Para o Wayland e os recursos de caneta que quero testar, não são a primeira opção.
 
-O TethrLink ajuda a estudar transporte por rede USB, filas de vídeo e teste real do codificador. O retorno de entrada dele emula ponteiro e depende das APIs do GNOME; não atende diretamente ao KDE nem comprova pressão da S Pen.
+Nesta etapa não instalei nenhum deles nem iniciei outra conexão com o tablet. Fiz o estudo, algumas consultas de preparação e organizei a documentação no GitHub. O inventário do computador ficou no relatório local.
 
-O projeto arch-galaxytab-submonitor usa Sunshine/Moonlight por rede USB. O próprio autor registra a entrada de caneta e touch como não verificada. Uma configuração que force HDMI deve ser conferida antes de aplicar, para preservar uma saída que já esteja em uso.
+Vou começar preparando o USB com UScreen: conferir EVDI, ADB, acesso ao uinput, versões do programa e do APK e o caminho da GPU. Depois quero testar a tela independente, o touch e os dados da S Pen, cada um com sua verificação.
 
-O projeto Second-Screen-Samsung-Linux ajuda a estudar o pedido de captura virtual ao portal, mas transmite MJPEG para uma página simples e não apresenta um caminho de retorno de entrada no cliente lido.
-
-Os projetos com XRandR e VNC ajudam a entender a criação e organização de telas, mas não são a base prioritária para esta sessão Wayland e para os requisitos de caneta.
-
-## Preparação ainda necessária
-
-O caminho USB exige conferir ADB, criação da saída virtual, codificação e acesso ao uinput. Essa conferência precisa ser feita no computador do teste, sem presumir que a instalação descrita por outro projeto terá o mesmo resultado.
-
-O inventário local e as consultas detalhadas ficaram no relatório entregue fora deste repositório público.
-
-## Próximo teste proposto
-
-Preparar uma tentativa USB com UScreen, começando pela conferência dos requisitos. Depois, validar separadamente a tela independente, o touch e a pressão da S Pen. Inclinação, aproximação, botão, rejeição da mão e gestos precisam de verificações próprias.
-
-O teste Miracast continua registrado. A entrada completa pelo receptor nativo da Samsung ainda exige investigação; não está resolvida pela transmissão de vídeo.
-
-Também comecei a documentação no GitHub, com README, histórico e plano de testes. A ideia é registrar cada avanço sem chamar de pronto o que ainda não foi testado.
-
+O Miracast continua no projeto. Conseguir vídeo pela função nativa da Samsung ainda não resolveu o retorno da caneta e dos dedos.

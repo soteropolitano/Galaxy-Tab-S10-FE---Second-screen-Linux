@@ -1,36 +1,21 @@
-# Etapa 06: primeira imagem no tablet
+# Etapa 06: apareceu imagem!
 
-Data: 21/10/2026.
+21/10/2026
 
-Conferi que a interface conflitante não atendia a uma carga ativa e guardei sua configuração. Retirei temporariamente apenas o endereço duplicado.
+Conferi que a interface com o endereço duplicado não estava atendendo a uma carga ativa, guardei a configuração e retirei somente aquele endereço. A rede continuou existindo.
 
-A restauração foi preparada antes do teste, com um processo separado e limite de tempo. A rede continuou existindo.
+Também deixei um processo separado encarregado da restauração, com limite de tempo. Queria conseguir comparar o resultado e depois voltar à configuração anterior.
 
-## Resultado
+Dessa vez conectou. A captura mostrou a resposta do computador ao pedido TCP e a negociação RTSP, com `SETUP`, `PLAY` e respostas de sucesso. O aplicativo chegou a `STREAMING` e a imagem apareceu no S10 FE.
 
-A conexão passou. A captura mostrou o pedido TCP, a resposta do computador e a negociação RTSP, incluindo `SETUP`, `PLAY` e respostas de sucesso.
+Por enquanto foi espelhamento. Ainda não era uma tela independente.
 
-O aplicativo chegou a `STREAMING`. A imagem apareceu no tablet em espelhamento.
+O aplicativo escolheu 1920 × 1080 a 30 quadros/s, com `vah264enc` e perfil H.264 Constrained Baseline pela GPU. Essa é a configuração registrada; não medi quantos quadros o tablet recebeu de fato.
 
-| Verificação | Resultado |
-| --- | --- |
-| Configuração de vídeo escolhida | 1920 × 1080 a 30 quadros/s |
-| Codificador identificado | `vah264enc`, pela GPU |
-| Perfil H.264 | Constrained Baseline |
-| Tela independente | Não validada; o teste foi em espelhamento |
-| Duração entre STREAMING e parada manual | Cerca de 43 segundos |
-| Pressão, touch, áudio e S Pen | Não testados |
+Deixei transmitir por cerca de 43 segundos, contados entre o início do vídeo e a parada manual. Não testei áudio, touch ou S Pen nesse intervalo.
 
-A taxa configurada não comprova a taxa efetivamente recebida pelo tablet. Não medi atraso ou estabilidade longa.
+Ao terminar, parei o aplicativo e restaurei o endereço. Conferi a configuração da rede e a disposição dos monitores físicos.
 
-## Como terminou
+O observador teve um problema ao tentar sinalizar o tcpdump: recebeu erro de permissão. Quando o aplicativo fechou, a interface desapareceu e a captura terminou. O arquivo permaneceu legível, com 56 pacotes e zero descartes pelo kernel informados pelo tcpdump. A restauração, que tinha outro processo, foi concluída.
 
-Parei o aplicativo e restaurei o endereço da ponte. Comparei a configuração da rede e a disposição dos monitores físicos com o estado anterior.
-
-O observador teve erro de permissão ao tentar sinalizar o tcpdump. Ao fechar o aplicativo, a interface desapareceu e a captura terminou. O arquivo continuou legível, com 56 pacotes e zero descartes pelo kernel informados pelo tcpdump. A restauração tinha um processo separado e foi concluída.
-
-## O que aprendi
-
-Retirar o endereço duplicado permitiu passar do ponto onde as tentativas anteriores falhavam. É uma evidência forte de que a colisão bloqueava o canal de controle.
-
-Como restaurei a rede original, o conflito voltou a existir. Este foi um experimento, não uma correção permanente.
+Retirar o endereço duplicado fez a conexão passar de onde vinha falhando. Isso deu uma evidência forte de que a colisão estava bloqueando o controle. Como restaurei a configuração original, ainda preciso resolver o conflito de forma permanente.

@@ -1,21 +1,15 @@
-# Etapa 03: H.264 na GPU
+# Etapa 03: conferindo a GPU
 
-Data: 21/10/2026.
+21/10/2026
 
-Corrigi a investigação da GPU. Fora do ambiente restrito e com um catálogo novo do GStreamer, o driver instalado oferecia `vah264lpenc`, com o modo de controle CQP. A base procurava outros nomes de codificador.
+Refiz a consulta fora do ambiente restrito, com um catálogo novo do GStreamer. O driver instalado tinha `vah264lpenc`, com controle CQP, enquanto o aplicativo procurava outros nomes de codificador.
 
-Extraí um pacote do driver Intel completo em uma pasta local, sem substituir o driver instalado. Com esse driver selecionado apenas para os processos de teste, `vah264enc` ficou disponível com CBR.
+Extraí um pacote do driver Intel completo em uma pasta local, sem substituir o instalado. Selecionei esse driver apenas para os processos de teste. Com ele, `vah264enc` ficou disponível com controle CBR.
 
-## Como conferi
+Para conferir, gerei 300 quadros de um vídeo sintético em 1920 × 1080 a 60 quadros/s. Depois abri o arquivo para contar os quadros e fiz a decodificação.
 
-Gerei um vídeo sintético de 300 quadros, em 1920 × 1080 a 60 quadros/s, usando `vah264enc`. Depois, conferi o arquivo e fiz a decodificação.
+O arquivo tinha os 300 quadros, cinco segundos de duração e decodificação sem erros. A execução levou cerca de cinco segundos. Consegui codificar H.264 pela GPU nesse teste.
 
-O arquivo tinha os 300 quadros, duração de cinco segundos, formato H.264 e decodificação sem erros. A execução levou cerca de cinco segundos.
+Ainda não era a tela do computador sendo enviada ao tablet, então isso não mede o atraso da conexão. Serviu para confirmar que o codificador funcionava com aquele driver e aqueles parâmetros.
 
-Isso mostrou que o caminho de codificação usado no teste funcionava. Não foi uma medida de atraso entre computador e tablet, nem uma transmissão de uma tela real.
-
-## O que aprendi
-
-Encontrar o nome de um codificador não basta. É preciso conseguir codificar quadros com o driver e os parâmetros que serão usados. Também é preciso separar uma limitação do ambiente de teste de uma limitação da máquina.
-
-Próximo passo definido: conectar ao S10 FE.
+Encontrar o nome do componente não tinha sido suficiente. Só consegui confirmar quando ele realmente produziu vídeo.

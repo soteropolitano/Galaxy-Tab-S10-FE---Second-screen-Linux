@@ -1,28 +1,19 @@
-# Etapa 01: base e diagnóstico
+# Etapa 01: escolhendo a base
 
-Data: 21/10/2026.
+21/10/2026
 
-Quero usar o S10 FE como uma tela a mais no Kubuntu. A primeira experiência com VNC ficou ruim, então comecei a estudar o GNOME Network Displays para usar o recurso “Segunda tela” do Samsung por Miracast.
+Depois da experiência ruim com VNC, comecei a estudar o GNOME Network Displays. Queria ver se conseguiria conectar pelo próprio “Segunda tela” do Samsung, usando Miracast.
 
-Baixei o código oficial, versão 0.99.0, no commit `c305023f1e6d8ab48d18c66a4efbd18e1df7cdee`. Nesta etapa, o objetivo foi entender a base e conferir os requisitos.
+Baixei a versão 0.99.0 do código oficial, no commit `c305023f1e6d8ab48d18c66a4efbd18e1df7cdee`, e comecei pelas consultas ao computador. O caminho precisava funcionar no Kubuntu com Wayland, então fui conferir captura de tela, codificação de vídeo e Wi-Fi Direct.
 
-## O que encontrei
+O driver de Wi-Fi anunciava os modos P2P usados pela conexão. Na base, encontrei captura pelo portal/PipeWire, codificação pelo GStreamer e a opção de solicitar uma tela virtual. Isso era suficiente para tentar, mas ainda não dizia se funcionaria com o tablet.
 
-- O caminho escolhido deve funcionar no Kubuntu com sessão Wayland.
-- Consultei os requisitos de captura, codificação e conexão direta.
-- O driver de Wi-Fi anuncia os modos P2P necessários para uma tentativa de Wi-Fi Direct.
-- A base usa captura por portal/PipeWire e codificação de vídeo pelo GStreamer.
-- O código solicita também a possibilidade de capturar uma tela virtual.
-
-Isso justificava testar, mas ainda não comprovava uma conexão com o tablet. Não compilei nem transmiti nesta etapa.
-
-## Como a imagem deve chegar ao tablet
+O vídeo deve passar por este caminho:
 
 ```text
-Tela do KDE -> portal e PipeWire -> codificador H.264
-            -> ligação Miracast -> receptor no tablet
+Tela do KDE -> portal/PipeWire -> H.264 -> Miracast -> tablet
 ```
 
-O retorno da caneta e do touch é outro caminho. Não basta o vídeo chegar para esses recursos funcionarem.
+A caneta e os dedos precisam fazer o caminho de volta. Essa parte ainda não tinha sido testada.
 
-Próximo passo definido: compilar a base e conferir a primeira abertura.
+Nesta etapa só estudei o código e conferi os requisitos. A compilação ficou para a seguinte.

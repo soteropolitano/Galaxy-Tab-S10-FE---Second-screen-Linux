@@ -1,84 +1,51 @@
 # Galaxy Tab S10 FE como segunda tela no Linux
 
-Quero usar meu Galaxy Tab S10 FE como uma segunda tela no Kubuntu, com S Pen e touch funcionando. Também quero ter a opção de conectar por USB.
+Estou tentando usar meu Galaxy Tab S10 FE como segunda tela no Kubuntu, com a S Pen e o touch funcionando também. Se conseguir usar por USB, melhor ainda.
 
-Comecei testando VNC, mas a experiência ficou ruim. Depois parti para o GNOME Network Displays e consegui transmitir imagem para o tablet usando o recurso “Segunda tela” da Samsung.
+A primeira tentativa foi com VNC. Não gostei da experiência, então comecei a testar o GNOME Network Displays para conectar pelo recurso “Segunda tela” da Samsung.
 
-Por enquanto, funcionou em espelhamento. A tela independente, a caneta e o touch ainda precisam ser testados.
+Depois de algumas tentativas com erro, consegui fazer a imagem aparecer! Por enquanto está espelhando uma tela do computador. Ainda preciso conseguir uma área independente, testar a caneta e o touch e ver como fica o desempenho no uso diário.
 
-Este repositório é o registro desse desenvolvimento. Vou deixar aqui o que fiz, o que deu errado e como resolvi, para aprender durante o processo e facilitar a reprodução dos testes.
+Estou deixando o processo aqui porque quero aprender durante o desenvolvimento. A ideia é conseguir acompanhar o que foi feito e entender os problemas que forem aparecendo.
 
-## Como está agora
+## Até agora
 
-| Parte | Situação |
-| --- | --- |
-| Encontrar o tablet por Wi-Fi Direct | Funcionou |
-| Transmitir imagem com Miracast | Funcionou em um teste curto, em espelhamento |
-| Codificar H.264 pela GPU | Validado em teste sintético e identificado na transmissão real |
-| Usar o tablet como tela independente | Pendente |
-| Touch e gestos | Pendente |
-| S Pen com pressão, inclinação e botão | Pendente |
-| Conexão USB | Referências estudadas; teste pendente |
-| Solução permanente para o conflito de rede | Pendente |
+O computador encontra o tablet por Wi-Fi Direct e já consegui transmitir imagem com Miracast. A codificação H.264 pela GPU também funcionou nos testes.
 
-Não tenho ainda uma comparação de desempenho com o aplicativo da Samsung no Windows. O teste que deu imagem durou cerca de 43 segundos entre o início da transmissão e a parada manual.
+O problema que estava impedindo a conexão era um endereço IP duplicado: o tablet e outra interface do computador usavam o mesmo endereço. Retirei o endereço conflitante por um momento e a transmissão começou. Depois restaurei a configuração, então ainda preciso resolver isso de forma permanente. O teste está descrito na [etapa 06](docs/etapas/06-primeira-imagem.md).
 
-## O problema que estava impedindo a conexão
-
-O tablet e outra interface do computador estavam usando o mesmo endereço IP. O pedido de conexão chegava, mas não recebia a resposta inicial.
-
-Retirei temporariamente o endereço conflitante de uma interface sem uso ativo naquele momento. A transmissão começou. Depois do teste, restaurei a configuração original.
-
-Isso deu uma evidência forte de que o endereço duplicado bloqueava a conexão. Como a configuração foi restaurada, ainda falta uma solução permanente.
-
-O procedimento e os limites estão na [etapa 06](docs/etapas/06-primeira-imagem.md). Os comandos dessa investigação dependem da rede de cada computador.
+Essa transmissão foi curta, cerca de 43 segundos entre o início do vídeo e a parada manual. Ainda não tenho uma comparação de desempenho com o aplicativo da Samsung no Windows.
 
 ## S Pen, touch e USB
 
-Passei a estudar outros projetos para aproveitar o que já existe.
+Comecei a olhar outros projetos para entender como fizeram essas partes. O [UScreen](https://github.com/majmichu1/UScreen) parece o caminho mais próximo do que estou procurando: tem aplicativo Android, conexão USB por ADB, tela estendida e código para levar pressão, inclinação e botão da caneta ao Linux, além do touch.
 
-O [UScreen](https://github.com/majmichu1/UScreen) é a referência mais próxima do que quero: tem cliente Android, vídeo por USB usando ADB, tela estendida e um caminho de entrada para caneta e touch no KDE Wayland. Encontrei código para pressão, inclinação, aproximação da caneta e botão, além de contatos de toque separados.
+Encontrei também um [relato com S10 FE+ no KDE](https://github.com/majmichu1/UScreen/issues/23), com a confirmação de uma correção no botão da S Pen. Isso ajuda, mas ainda preciso testar no meu S10 FE.
 
-Também há um [relato com S10 FE+ e KDE](https://github.com/majmichu1/UScreen/issues/23), incluindo a confirmação de uma correção para o botão da S Pen. Isso ajuda a escolher o próximo teste, mas não confirma o funcionamento no meu S10 FE.
+Quero conferir algumas coisas:
 
-Vou manter o teste Miracast como base do caminho sem fio e usar o UScreen como referência prioritária para USB e entrada. Se ele atender ao objetivo, faz sentido aproveitar o projeto e contribuir com correções antes de refazer tudo.
+- Colocar uma janela no tablet e continuar usando outras nas telas do computador;
+- Tocar no lugar certo, arrastar e usar mais de um dedo nos aplicativos que aceitam;
+- Desenhar com pressão, testar inclinação, aproximação e botão da S Pen;
+- Apoiar a mão enquanto desenho sem provocar cliques e rolagens;
+- Desconectar sem deixar uma tela virtual ou algum toque preso.
 
-USB, nesse caso, é transporte de dados para um aplicativo no tablet. Não é transformar o aparelho em uma entrada HDMI. O caminho ADB também exige depuração USB; outros projetos usam compartilhamento de rede por USB.
+Vou começar pelo caminho USB do UScreen. Nesse caso, o cabo leva os dados para o aplicativo Android usando ADB e exige depuração USB. Outros projetos fazem isso por compartilhamento de rede USB. Não são o mesmo procedimento.
 
-A comparação dos links e os detalhes estão no [estudo das referências](docs/referencias.md).
+O caminho sem fio continua no plano. O Miracast já deu imagem, mas a entrada pela função nativa da Samsung ainda precisa ser investigada. O próprio UScreen também tem uma opção Wi-Fi para testar depois.
 
-## O que preciso considerar funcionando
+## Como estou organizando
 
-- Uma área de trabalho independente no tablet, com janelas diferentes das telas do computador.
-- Touch no lugar certo, sem mandar o toque para outro monitor.
-- Gestos com mais de um dedo nos aplicativos que os aceitam.
-- S Pen reconhecida como caneta, com pressão, inclinação, aproximação e botão testados no aparelho.
-- Rejeição de toques da mão enquanto desenho, com comportamento previsível.
-- Conexão por USB validada e o caminho sem fio documentado separadamente.
-- Desconectar sem deixar tela virtual, toque ou botão presos.
+Estou fazendo por etapas, com um registro do que aconteceu e uma pausa antes de continuar. Os relatórios completos são entregues localmente; aqui ficam as explicações sem os endereços da rede e o inventário do computador.
 
-Usar a ponta da S Pen como um clique de mouse não fecha o requisito de caneta. Quero verificar os dados de pressão e o resultado em um aplicativo de desenho, como o Krita.
+1. [Escolha da base e diagnóstico](docs/etapas/01-base-e-diagnostico.md)
+2. [Compilação e primeira abertura](docs/etapas/02-compilacao.md)
+3. [Teste de H.264 pela GPU](docs/etapas/03-h264-na-gpu.md)
+4. [Primeiras tentativas com o tablet](docs/etapas/04-primeiras-tentativas.md)
+5. [Investigação do conflito de rede](docs/etapas/05-conflito-de-rede.md)
+6. [Primeira imagem](docs/etapas/06-primeira-imagem.md)
+7. [Estudo de S Pen, touch e USB](docs/etapas/07-caneta-touch-usb.md)
 
-## Registro das etapas
+O [plano de testes](docs/plano.md) mostra o que pretendo fazer em seguida. A comparação dos projetos, os arquivos que consultei e os créditos estão nas [referências](docs/referencias.md).
 
-| Etapa | O que foi feito |
-| --- | --- |
-| [01](docs/etapas/01-base-e-diagnostico.md) | Escolha da base e diagnóstico do computador |
-| [02](docs/etapas/02-compilacao.md) | Compilação e primeira abertura |
-| [03](docs/etapas/03-h264-na-gpu.md) | Validação de H.264 pela GPU |
-| [04](docs/etapas/04-primeiras-tentativas.md) | Descoberta do tablet e primeiras falhas de conexão |
-| [05](docs/etapas/05-conflito-de-rede.md) | Captura de controle e identificação do endereço duplicado |
-| [06](docs/etapas/06-primeira-imagem.md) | Primeira imagem com o conflito temporariamente retirado |
-| [07](docs/etapas/07-caneta-touch-usb.md) | Estudo de S Pen, touch e USB; documentação no GitHub |
-
-O [plano de testes](docs/plano.md) mostra a sequência proposta. Cada etapa termina com um registro legível e uma pausa antes de continuar.
-
-## Sobre este repositório
-
-Ainda é um projeto em desenvolvimento. Não há aqui um aplicativo próprio pronto para instalar.
-
-A base Miracast estudada é o [GNOME Network Displays](https://gitlab.gnome.org/GNOME/gnome-network-displays), no commit `c305023f1e6d8ab48d18c66a4efbd18e1df7cdee`, sem modificações no código até a etapa 07.
-
-Os relatórios completos de cada etapa são entregues localmente. Aqui ficam os registros públicos, sem o inventário da máquina ou os endereços da rede.
-
-Os projetos consultados estão creditados nas referências. Não publiquei aqui o código deles nem os arquivos brutos de captura de rede. Quando houver código derivado, vou manter a identificação da origem e os avisos da licença correspondente.
+Ainda não há um aplicativo próprio pronto para instalar neste repositório. A base Miracast usada é o [GNOME Network Displays](https://gitlab.gnome.org/GNOME/gnome-network-displays), no commit `c305023f1e6d8ab48d18c66a4efbd18e1df7cdee`, sem alterações no código até a etapa 07.

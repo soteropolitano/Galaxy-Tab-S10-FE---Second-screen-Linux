@@ -1,25 +1,19 @@
-# Etapa 05: conflito de rede
+# Etapa 05: procurando o erro na rede
 
-Data: 21/10/2026.
+21/10/2026
 
-Preparei um observador para aguardar a interface Wi-Fi Direct e registrar o tráfego de controle, os endereços e as rotas. A primeira captura começou cedo demais, então ajustei o observador para esperar a ativação da interface.
+Preparei um observador para acompanhar a interface Wi-Fi Direct e registrar os pacotes de controle. Na primeira tentativa ele começou cedo demais: a interface já existia, mas ainda não estava ativa. Ajustei para esperar a ativação e refiz a captura.
 
-## O que apareceu
+O tablet repetia o pedido inicial TCP e não recebia a resposta esperada do computador. Eram retransmissões da mesma tentativa, não vários cliques meus.
 
-O tablet repetia o mesmo pedido inicial TCP e não recebia a resposta esperada do computador. Eram retransmissões de uma tentativa, não vários cliques.
+Ao conferir os endereços, encontrei a duplicidade. O tablet e outra interface local usavam o mesmo IP. A consulta de rota tratava o destino como parte do próprio computador, em vez de apontar para o aparelho externo.
 
-Encontrei o mesmo endereço IP atribuído ao tablet e a outra interface local. A consulta de rota tratava esse destino como pertencente ao próprio computador, em vez de apontar para o aparelho externo.
-
-## Como investigar uma situação parecida
-
-Primeiro é preciso identificar os endereços da conexão real. Depois, consultar a rota para o tablet:
+Uma consulta útil para investigar isso é:
 
 ```text
 ip -4 route get <IP_DO_TABLET>
 ```
 
-O texto entre os sinais de menor e maior é um marcador, não um endereço para copiar. Se o resultado disser `local` e apontar para `lo`, vale conferir se esse endereço também está configurado no computador.
+É preciso substituir `<IP_DO_TABLET>` pelo endereço daquela conexão. Se aparecer `local` e a interface `lo`, vale conferir se o mesmo IP está configurado no computador. Os endereços reais deste teste ficaram no registro local.
 
-A duplicidade foi confirmada no teste. Ainda precisava retirar temporariamente o conflito para verificar se o resultado da conexão mudava.
-
-Próximo passo definido: um experimento com restauração ao terminar. Os endereços reais e o inventário da rede ficaram no registro local.
+Encontrei o conflito, mas ainda precisava saber se era ele que impedia a conexão. Decidi retirar o endereço duplicado temporariamente, com a restauração preparada antes de começar. Fiz esse teste na etapa seguinte.

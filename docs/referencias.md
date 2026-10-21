@@ -1,81 +1,85 @@
-# O que aprendi com os projetos
+# Projetos que estou estudando
 
-Consulta: 21/10/2026. Li a documentação dos projetos, os caminhos de código indicados abaixo e relatos de uso. Não instalei nem executei esses projetos nesta etapa.
+Consulta feita em 21/10/2026.
 
-## Comparação para o meu objetivo
+Reuni esses projetos para entender como cada um resolve a tela, o vídeo, a conexão e a entrada. Li a documentação, os trechos de código indicados abaixo e alguns relatos de uso. Ainda não instalei nem executei nenhum deles neste projeto.
 
-| Referência | Caminho de vídeo e USB | Caneta e touch | Aproveitamento no Kubuntu |
-| --- | --- | --- | --- |
-| [UScreen](https://github.com/majmichu1/UScreen) | Tela EVDI, H.264/HEVC, cliente Android e ADB por USB; também documenta Wi-Fi | Código de pressão, inclinação, aproximação, botão e contatos de toque via uinput | Referência prioritária; tem integração específica com KDE Wayland |
-| [Android-as-second-monitor-for-linux](https://github.com/user12043/Android-as-second-monitor-for-linux) | XRandR e programa remoto externo; sugere ADB ou rede USB | Depende do programa remoto; o script não implementa caneta com pressão | Ajuda a entender o fluxo, mas depende de X11 |
-| [Second-Screen-Samsung-Linux](https://github.com/Mathweuzz/Second-Screen-Samsung-Linux) | Portal/PipeWire e MJPEG no navegador | O cliente lido só exibe a imagem; não tem envio de eventos | Referência de captura virtual; não substitui o receptor Miracast da Samsung |
-| [arch-galaxytab-submonitor](https://github.com/yanghoeg/arch-galaxytab-submonitor) | Saída HDMI forçada por EDID, Sunshine/Moonlight e rede USB | O autor registra retorno de entrada como não verificado | Aproveitar a separação entre tela, vídeo e entrada; não aplicar o instalador Arch diretamente |
-| [Gist de 8bitbuddhist](https://gist.github.com/8bitbuddhist/7ab180286d6eb7fdc68d374063814175?permalink_comment_id=4065391) | XRandR, x11vnc e `adb reverse` | O script não implementa um protocolo de caneta | Exemplo simples de USB levando uma conexão TCP |
-| [VirtScreen](https://github.com/kbumsik/VirtScreen) | Interface para XRandR e x11vnc | Não apresenta implementação própria de pressão da caneta | Ideias de interface e organização da tela; base feita para Xorg |
-| [Artigo sobre USB / TethrLink](https://medium.com/@princesavsaviya2023.learning/i-turned-my-android-tablet-into-a-real-second-monitor-over-a-usb-cable-962c4c2e9758) | GNOME/Mutter, H.264 e rede USB, com cliente Android | Emulação de ponteiro; gestos não equivalem a uma mesa digitalizadora | Aproveitar ideias de transporte e vídeo; as APIs de entrada lidas são específicas do GNOME |
-| [Tópico screen-extender](https://github.com/topics/screen-extender) | Lista de projetos, não uma implementação | Varia por projeto | Usei para localizar Moreland e conferir seu escopo |
+## UScreen
 
-## UScreen: a referência mais próxima
+O [UScreen](https://github.com/majmichu1/UScreen) parece o mais próximo do que procuro. Ele apresenta uma tela ao KDE usando EVDI, envia o vídeo ao aplicativo Android e recebe os eventos da caneta e dos dedos por outro canal. O caminho principal USB usa ADB; também existe uma opção Wi-Fi.
 
-O projeto usa EVDI para apresentar uma tela ao compositor. Depois captura os quadros, codifica e leva o vídeo ao aplicativo Android. O retorno da entrada usa outro canal.
+Fui conferir no código como a entrada é tratada:
 
-Isso permite tratar caneta como caneta e dedos como touchscreen no Linux. No código consultado:
+- [TouchCapture.kt](https://github.com/majmichu1/UScreen/blob/66f6bcdab918b8dcc44227dde00197f30a778c44/android/app/src/main/java/com/uscreen/TouchCapture.kt) lê pressão, inclinação, orientação, aproximação e botão. Também acompanha os contatos dos dedos e filtra toques enquanto a caneta está ativa;
+- [input.rs](https://github.com/majmichu1/UScreen/blob/66f6bcdab918b8dcc44227dde00197f30a778c44/host/src/input.rs) cria dispositivos uinput separados para caneta e touchscreen, com pressão, inclinação e contatos de multitouch;
+- O mapeamento em input.rs usa o código de [kwin.rs](https://github.com/majmichu1/UScreen/blob/66f6bcdab918b8dcc44227dde00197f30a778c44/host/src/kwin.rs) para associar a entrada à tela correta;
+- [encoders.rs](https://github.com/majmichu1/UScreen/blob/66f6bcdab918b8dcc44227dde00197f30a778c44/host/src/encoders.rs) tenta codificar um quadro para escolher um codificador que realmente funcione.
 
-- [TouchCapture.kt](https://github.com/majmichu1/UScreen/blob/66f6bcdab918b8dcc44227dde00197f30a778c44/android/app/src/main/java/com/uscreen/TouchCapture.kt) lê pressão, tipo de ferramenta, inclinação/orientação, aproximação e botão. Também acompanha os contatos dos dedos e filtra toques enquanto a caneta está ativa.
-- [input.rs](https://github.com/majmichu1/UScreen/blob/66f6bcdab918b8dcc44227dde00197f30a778c44/host/src/input.rs) cria dispositivos uinput separados, declara os eixos de pressão/inclinação e usa contatos de multitouch. A presença desse código não comprova o resultado em cada aplicativo.
-- [kwin.rs](https://github.com/majmichu1/UScreen/blob/66f6bcdab918b8dcc44227dde00197f30a778c44/host/src/kwin.rs) e o mapeamento em input.rs usam D-Bus para associar os dispositivos à saída correta. Esse ponto merece teste em áreas de trabalho com várias telas.
-- [encoders.rs](https://github.com/majmichu1/UScreen/blob/66f6bcdab918b8dcc44227dde00197f30a778c44/host/src/encoders.rs) faz uma codificação de prova para decidir se um codificador realmente funciona. VA-API é um dos caminhos a avaliar no teste.
-- A [arquitetura](https://github.com/majmichu1/UScreen/blob/66f6bcdab918b8dcc44227dde00197f30a778c44/docs/architecture.md) descreve vídeo TCP e entrada WebSocket em portas locais, levadas pelo `adb reverse`. Não exige compartilhamento de rede USB nesse caminho.
+A [arquitetura](https://github.com/majmichu1/UScreen/blob/66f6bcdab918b8dcc44227dde00197f30a778c44/docs/architecture.md) descreve vídeo por TCP e entrada por WebSocket, em portas locais encaminhadas pelo `adb reverse`. Esse caminho não exige compartilhamento de rede USB.
 
-O [relato #23](https://github.com/majmichu1/UScreen/issues/23) é de um S10 FE+ com KDE Wayland, não do meu S10 FE. O botão não funcionava inicialmente. Depois da correção no aplicativo Android, o usuário confirmou eventos de pressionar e soltar. Isso é mais útil para planejar o teste do que apenas uma lista de recursos no README.
+Encontrei o [relato de um S10 FE+ com KDE](https://github.com/majmichu1/UScreen/issues/23). O botão da S Pen não funcionava inicialmente; depois da correção no aplicativo Android, o usuário confirmou os eventos de pressionar e soltar. É uma referência útil, mas ainda não é um teste do meu S10 FE.
 
-A [documentação de compatibilidade](https://github.com/majmichu1/UScreen/blob/66f6bcdab918b8dcc44227dde00197f30a778c44/docs/compatibility.md) também registra resultados muito diferentes de atraso entre aparelhos. Não vou transferir os números do hardware de referência para o meu computador.
+Também olhei a [lista de compatibilidade](https://github.com/majmichu1/UScreen/blob/66f6bcdab918b8dcc44227dde00197f30a778c44/docs/compatibility.md). Há diferenças grandes de atraso entre aparelhos. Vou precisar medir aqui, sem assumir o resultado do hardware usado pelo autor.
 
-## TethrLink: boas ideias, outro compositor
+## TethrLink e o artigo sobre USB
 
-O artigo aponta para o [TethrLink](https://github.com/princesavsaviya/TethrLink). O autor descreve um caminho por rede USB, captura virtual e H.264. As ideias de testar o codificador, controlar as filas e respeitar a proporção da tela ajudam no projeto.
+O [artigo enviado](https://medium.com/@princesavsaviya2023.learning/i-turned-my-android-tablet-into-a-real-second-monitor-over-a-usb-cable-962c4c2e9758) leva ao [TethrLink](https://github.com/princesavsaviya/TethrLink). Ele usa uma rede criada pelo compartilhamento USB, tela virtual e H.264. As ideias de testar o codificador, controlar filas e respeitar a proporção da tela ajudam no estudo.
 
-No código do repositório, [remote_input.py](https://github.com/princesavsaviya/TethrLink/blob/75a66798bb10aee0d883dba3ef1a2360f72a5c73/server/core/remote_input.py) usa `org.gnome.Mutter.RemoteDesktop`. O [protocolo de entrada](https://github.com/princesavsaviya/TethrLink/blob/75a66798bb10aee0d883dba3ef1a2360f72a5c73/server/core/input_protocol.py) transporta movimento de ponteiro, botão e rolagem. Não encontrei nesse protocolo campos de pressão e inclinação.
+A entrada, porém, está ligada ao GNOME. O arquivo [remote_input.py](https://github.com/princesavsaviya/TethrLink/blob/75a66798bb10aee0d883dba3ef1a2360f72a5c73/server/core/remote_input.py) usa `org.gnome.Mutter.RemoteDesktop`. No [protocolo](https://github.com/princesavsaviya/TethrLink/blob/75a66798bb10aee0d883dba3ef1a2360f72a5c73/server/core/input_protocol.py), encontrei movimento de ponteiro, botão e rolagem, mas não campos de pressão e inclinação.
 
-Portanto, não é uma solução pronta para o KDE nem uma referência completa de caneta. Gestos convertidos em cliques e rolagem podem ser úteis, mas são diferentes de contatos de toque independentes.
+Portanto, não consigo usar esse caminho diretamente no KDE para atender à caneta que quero. Converter gestos em cliques e rolagem também é diferente de enviar contatos de toque separados.
 
-## Sunshine/Moonlight e o cuidado com a tela física
+## arch-galaxytab-submonitor
 
-O README do arch-galaxytab-submonitor separa bem o que foi testado do que ainda não foi. O autor validou vídeo por rede USB, mas registra caneta/touch como não verificados.
+O [projeto](https://github.com/yanghoeg/arch-galaxytab-submonitor) usa EDID e parâmetros de kernel para forçar uma saída HDMI, depois transmite com Sunshine/Moonlight. O autor validou vídeo por rede USB, mas registra a entrada de caneta e touch como não verificada.
 
-Ele usa parâmetros de kernel e EDID para forçar uma saída HDMI. Antes de aplicar esse método, é preciso conferir se a saída escolhida já atende a um monitor. Não posso presumir que forçar um conector criará uma tela livre sem afetar uma existente.
+Antes de tentar esse método, preciso conferir se a saída escolhida já atende a um monitor. Forçar um conector pode interferir numa tela existente. O instalador também é voltado ao Arch, então não é algo para aplicar diretamente no Kubuntu.
 
-Outra lição é de transporte: `adb reverse` encaminha TCP; o caminho Sunshine/Moonlight descrito usa UDP e por isso adota rede por USB. “Tem USB” não significa que todos os projetos usam o mesmo método.
+Outra diferença está no transporte: `adb reverse` encaminha TCP, enquanto o caminho Sunshine/Moonlight descrito usa UDP. Por isso, ali foi usada uma rede por USB.
 
-## Pedido de tela virtual não é garantia de criação
+## Second-Screen-Samsung-Linux
 
-O projeto Second-Screen-Samsung-Linux solicita `types = 4` em [wayland_capture.c](https://github.com/Mathweuzz/Second-Screen-Samsung-Linux/blob/dff5eb594a5808eee25fc343759b8cc91927c1ea/src/wayland_capture.c). O [cliente HTML](https://github.com/Mathweuzz/Second-Screen-Samsung-Linux/blob/dff5eb594a5808eee25fc343759b8cc91927c1ea/client/index.html) lido contém a imagem MJPEG, sem um caminho de retorno de entrada.
+O [projeto](https://github.com/Mathweuzz/Second-Screen-Samsung-Linux) solicita uma tela virtual ao portal e transmite MJPEG para o navegador. Em [wayland_capture.c](https://github.com/Mathweuzz/Second-Screen-Samsung-Linux/blob/dff5eb594a5808eee25fc343759b8cc91927c1ea/src/wayland_capture.c), encontrei o pedido com `types = 4`. O [cliente HTML](https://github.com/Mathweuzz/Second-Screen-Samsung-Linux/blob/dff5eb594a5808eee25fc343759b8cc91927c1ea/client/index.html) lido mostra o vídeo, mas não envia entrada de volta.
 
-A [documentação oficial do portal](https://flatpak.github.io/xdg-desktop-portal/docs/doc-org.freedesktop.portal.ScreenCast.html) define o tipo VIRTUAL e a consulta `AvailableSourceTypes`. A disponibilidade precisa ser consultada no ambiente do teste. Ainda falta validar a criação e o uso da saída na prática.
+Ajuda a entender a captura pelo portal. Apesar do nome, isso não demonstra uma integração com o receptor “Segunda tela” da Samsung. As afirmações de latência do README também não foram reproduzidas aqui.
 
-O nome do projeto não comprova integração com o aplicativo “Segunda tela” da Samsung. Também não tratei as afirmações de latência do README como medidas reproduzidas aqui.
+A [documentação do portal](https://flatpak.github.io/xdg-desktop-portal/docs/doc-org.freedesktop.portal.ScreenCast.html) explica o tipo VIRTUAL e a consulta `AvailableSourceTypes`. Preciso conferir o suporte no ambiente do teste e depois criar e usar a saída de fato.
 
-## O que encontrei no tópico screen-extender
+## Android-as-second-monitor-for-linux
 
-O [Moreland](https://github.com/adiimanav/moreland) tem um caminho de vídeo por ADB/USB e VA-API. O próprio README diz que não implementa entrada de toque ou caneta e que o caminho de captura precisa de outro backend para o KWin.
+O [script](https://github.com/user12043/Android-as-second-monitor-for-linux) organiza uma tela virtual com XRandR e deixa a conexão para outro programa remoto. A documentação sugere ADB ou compartilhamento de rede USB.
 
-Serve como referência de transporte e medição. Não é a opção prioritária para fechar os requisitos no Kubuntu atual.
+Ele ajuda a entender a sequência de criar uma tela e conectar um cliente. Depende de X11 e não implementa um protocolo próprio para caneta com pressão. A entrada fica por conta do programa remoto escolhido.
 
-## O que muda na base Miracast
+## Gist de 8bitbuddhist
 
-Na versão do GNOME Network Displays estudada, encontrei `wfd_uibc_capability` em uma lista de parâmetros. Não encontrei implementação de recepção e injeção da caneta/touch no código pesquisado. As ocorrências de `touch_session` são manutenção da sessão RTSP, não toque na tela.
+O [gist](https://gist.github.com/8bitbuddhist/7ab180286d6eb7fdc68d374063814175?permalink_comment_id=4065391) combina XRandR, x11vnc e `adb reverse`. É um exemplo simples de como o cabo pode levar uma conexão TCP.
 
-Vou manter o resultado de vídeo já conseguido. Para usar entrada pelo receptor nativo da Samsung, ainda seria necessário investigar o que ele anuncia, implementar o retorno compatível e testar quais dados realmente envia. Pressão e inclinação não estão garantidas nesse caminho.
+Fica como referência desse transporte. O script não implementa os dados da caneta e o caminho de tela também é de X11.
 
-## Pontos técnicos para o desenvolvimento
+## VirtScreen
 
-A [documentação Android de caneta](https://developer.android.com/develop/ui/views/touch-and-input/stylus-input/advanced-stylus-features) explica os dados de pressão, inclinação, orientação e aproximação que o cliente pode ler. Esses dados precisam atravessar o protocolo e chegar ao aplicativo Linux.
+O [VirtScreen](https://github.com/kbumsik/VirtScreen) coloca uma interface sobre XRandR e x11vnc, com opções de posição, retrato e HiDPI. Essas opções ajudam a pensar na organização da tela.
 
-A [documentação do uinput](https://docs.kernel.org/input/uinput.html) explica como criar dispositivos de entrada virtuais a partir de um programa. É a peça usada pelo UScreen para apresentar a entrada recebida ao Linux.
+Foi feito para Xorg e não apresenta uma implementação própria de pressão da caneta. Como já tive uma experiência ruim com VNC e estou usando Wayland, não será a primeira tentativa.
 
-Se o Android ou a caneta não gerar determinado evento, declarar o recurso no lado Linux não o cria.
+## Tópico screen-extender e Moreland
+
+O [tópico](https://github.com/topics/screen-extender) é uma lista de projetos. Por ele cheguei ao [Moreland](https://github.com/adiimanav/moreland), que tem vídeo por ADB/USB e VA-API.
+
+O próprio README informa que não há entrada de toque ou caneta e que o KWin precisa de outro backend de captura. Vou aproveitar as referências de transporte e medição, mas ele não fecha os requisitos atuais.
+
+## E a base Miracast que já estou usando?
+
+Na versão estudada do GNOME Network Displays, encontrei `wfd_uibc_capability` numa lista de parâmetros. Não encontrei implementação de recepção e injeção da caneta e do touch na pesquisa feita. As ocorrências de `touch_session` mantêm a sessão RTSP ativa; não são eventos de dedo na tela.
+
+Vou manter o resultado de vídeo. Para ter a entrada pelo receptor nativo da Samsung, ainda preciso investigar o que ele anuncia, implementar um retorno compatível e conferir quais dados realmente envia. Pressão e inclinação continuam pendentes nesse caminho.
+
+Para acompanhar essa parte, estou usando a [documentação de caneta do Android](https://developer.android.com/develop/ui/views/touch-and-input/stylus-input/advanced-stylus-features) e a [documentação do uinput](https://docs.kernel.org/input/uinput.html). Os dados precisam sair do Android, atravessar o protocolo e chegar ao aplicativo Linux. Se o aparelho não emitir um evento, declarar o campo no computador não resolve.
 
 ## Versões consultadas
+
+Deixei os commits abaixo para conseguir voltar ao código que li. São versões de consulta, não versões instaladas neste projeto.
 
 | Projeto | Commit |
 | --- | --- |
@@ -86,5 +90,3 @@ Se o Android ou a caneta não gerar determinado evento, declarar o recurso no la
 | VirtScreen | `9637d628165cd46db0873dbd82af2bfd91d0b7d2` |
 | TethrLink | `75a66798bb10aee0d883dba3ef1a2360f72a5c73` |
 | Moreland | `71187c3c8e50d70b8e93ed9ae10934f7d01ad315` |
-
-São versões de consulta, não versões instaladas ou testes de compatibilidade deste projeto.
