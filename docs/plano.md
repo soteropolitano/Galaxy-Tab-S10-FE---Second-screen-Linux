@@ -1,10 +1,10 @@
 # O que pretendo fazer agora
 
-Prefiro usar o cabo sem ativar a depuração USB. A rede por ancoragem USB já funcionou no S10 FE e no Kubuntu: consegui abrir no tablet uma página servida pelo computador. O registro está na [etapa 08](etapas/08-rede-usb-sem-depuracao.md).
+Prefiro usar o cabo sem ativar a depuração USB. A rede por ancoragem USB já funcionou no S10 FE e no Kubuntu: consegui abrir no tablet uma página servida pelo computador. O registro está na [etapa 08](testes.md#etapa-08).
 
 O UScreen continua como referência para tela, S Pen e touch no KDE, mas seu modo USB atual usa ADB. Preciso avaliar como aproveitar essas partes com outro transporte. O TethrLink ajuda a estudar a rede USB, mas depende do GNOME e não pode ser adotado diretamente para resolver a entrada no KDE.
 
-Na [etapa 09](etapas/09-spen-e-touch-pelo-cabo.md), recebi pelo navegador dados de pressão e inclinação da S Pen e até cinco dedos simultâneos. Ainda falta usar essa entrada no Linux. Também mapeei as dependências de ADB no UScreen.
+Na [etapa 09](testes.md#etapa-09), recebi pelo navegador dados de pressão e inclinação da S Pen e até cinco dedos simultâneos. Ainda falta usar essa entrada no Linux. Também mapeei as dependências de ADB no UScreen.
 
 Agora quero preparar o programa e o aplicativo:
 

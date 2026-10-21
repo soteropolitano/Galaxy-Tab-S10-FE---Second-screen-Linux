@@ -12,7 +12,7 @@ Estou deixando o processo aqui porque quero aprender durante o desenvolvimento. 
 
 O computador encontra o tablet por Wi-Fi Direct e já consegui transmitir imagem com Miracast. A codificação H.264 pela GPU também funcionou nos testes.
 
-O problema que estava impedindo a conexão era um endereço IP duplicado: o tablet e outra interface do computador usavam o mesmo endereço. Retirei o endereço conflitante por um momento e a transmissão começou. Depois restaurei a configuração, então ainda preciso resolver isso de forma permanente. O teste está descrito na [etapa 06](docs/etapas/06-primeira-imagem.md).
+O problema que estava impedindo a conexão era um endereço IP duplicado: o tablet e outra interface do computador usavam o mesmo endereço. Retirei o endereço conflitante por um momento e a transmissão começou. Depois restaurei a configuração, então ainda preciso resolver isso de forma permanente. O teste está descrito na [etapa 06](docs/testes.md#etapa-06).
 
 Essa transmissão foi curta, cerca de 43 segundos entre o início do vídeo e a parada manual. Ainda não tenho uma comparação de desempenho com o aplicativo da Samsung no Windows.
 
@@ -30,11 +30,11 @@ Quero conferir algumas coisas:
 - Apoiar a mão enquanto desenho sem provocar cliques e rolagens;
 - Desconectar sem deixar uma tela virtual ou algum toque preso.
 
-O compartilhamento de rede por USB, também chamado de USB tethering, já funcionou no S10 FE com a depuração desligada. O Kubuntu reconheceu a rede automaticamente, o tablet respondeu ao teste de comunicação e consegui abrir nele uma página servida pelo computador. Registrei esse teste na [etapa 08](docs/etapas/08-rede-usb-sem-depuracao.md).
+O compartilhamento de rede por USB, também chamado de USB tethering, já funcionou no S10 FE com a depuração desligada. O Kubuntu reconheceu a rede automaticamente, o tablet respondeu ao teste de comunicação e consegui abrir nele uma página servida pelo computador. Registrei esse teste na [etapa 08](docs/testes.md#etapa-08).
 
 Ainda preciso levar vídeo e entrada por essa rede e adaptar o programa Linux e o aplicativo Android para esse transporte. A conexão pelo cabo foi validada; a transmissão da tela por USB ainda está pendente.
 
-Fiz também um teste separado pelo navegador: o computador recebeu pressão e inclinação da S Pen e até cinco dedos simultâneos pela rede USB. Ainda não liguei esses eventos à entrada do Linux. Aproximação, botão lateral e rejeição de palma continuam pendentes. Os resultados estão na [etapa 09](docs/etapas/09-spen-e-touch-pelo-cabo.md).
+Fiz também um teste separado pelo navegador: o computador recebeu pressão e inclinação da S Pen e até cinco dedos simultâneos pela rede USB. Ainda não liguei esses eventos à entrada do Linux. Aproximação, botão lateral e rejeição de palma continuam pendentes. Os resultados estão na [etapa 09](docs/testes.md#etapa-09).
 
 O UScreen continua como referência para caneta e touch. Só ativar o compartilhamento USB não muda o transporte dele: conexão, abertura do aplicativo e autorização da sessão também precisam funcionar sem ADB. O modo Wi-Fi que consultei também usa ADB.
 
@@ -44,15 +44,7 @@ O caminho sem fio continua no plano. O Miracast já deu imagem, mas a entrada pe
 
 Estou fazendo por etapas, com um registro do que aconteceu e uma pausa antes de continuar. Os relatórios completos ficam salvos no meu computador; aqui ficam as explicações sem os endereços da rede e o inventário do computador.
 
-1. [Escolha da base e diagnóstico](docs/etapas/01-base-e-diagnostico.md)
-2. [Compilação e primeira abertura](docs/etapas/02-compilacao.md)
-3. [Teste de H.264 pela GPU](docs/etapas/03-h264-na-gpu.md)
-4. [Primeiras tentativas com o tablet](docs/etapas/04-primeiras-tentativas.md)
-5. [Investigação do conflito de rede](docs/etapas/05-conflito-de-rede.md)
-6. [Primeira imagem](docs/etapas/06-primeira-imagem.md)
-7. [Estudo de S Pen, touch e USB](docs/etapas/07-caneta-touch-usb.md)
-8. [Rede USB sem depuração](docs/etapas/08-rede-usb-sem-depuracao.md)
-9. [S Pen e touch pela rede USB](docs/etapas/09-spen-e-touch-pelo-cabo.md)
+Reuni as nove etapas no [registro dos testes](docs/testes.md), da escolha da base aos testes de caneta e dedos pelo cabo.
 
 O [plano de testes](docs/plano.md) mostra o que pretendo fazer em seguida. A comparação dos projetos, os arquivos que consultei e os créditos estão nas [referências](docs/referencias.md).
 
