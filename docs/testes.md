@@ -1,8 +1,8 @@
 # Testes do Galaxy Tab S10 FE no Linux
 
-Reuni aqui os registros que estavam separados por etapa. O caminho começou pelo Miracast e chegou à rede USB com a depuração desligada, incluindo os testes de pressão, inclinação e dedos pelo navegador.
+Reuni aqui os registros que estavam separados por etapa. O caminho começou pelo Miracast e chegou à rede USB com a depuração desligada, incluindo os testes pelo navegador, a adaptação do aplicativo Android e os primeiros testes locais de vídeo.
 
-Os relatos seguem a ordem em que fiz os testes, com os erros, as correções e o que ainda faltava em cada momento. Até agora consegui imagem por Miracast, em espelhamento, e dados de caneta e touch pela rede USB. A tela independente e a entrada nos aplicativos Linux continuam pendentes.
+Os relatos seguem a ordem em que fiz os testes, com os erros, as correções e o que ainda faltava em cada momento. Até agora consegui imagem por Miracast, em espelhamento, e dados de caneta e touch pela rede USB. O aplicativo Android adaptado também já conectou sem ADB e enviou touch. Consegui criar e capturar uma tela virtual num teste local, mas ainda falta exibi-la no tablet pelo cabo e usar a entrada nos aplicativos Linux.
 
 1. [Etapa 01: escolhendo a base](#etapa-01)
 2. [Etapa 02: compilando e abrindo](#etapa-02)
@@ -13,6 +13,7 @@ Os relatos seguem a ordem em que fiz os testes, com os erros, as correções e o
 7. [Etapa 07: S Pen, touch e USB](#etapa-07)
 8. [Etapa 08: a rede pelo cabo funcionou](#etapa-08)
 9. [Etapa 09: S Pen e dedos pelo cabo](#etapa-09)
+10. [Etapa 10: o aplicativo conectou sem ADB](#etapa-10)
 
 ---
 
@@ -252,3 +253,62 @@ Para usar a rede USB, preciso adaptar os dois lados. O cliente deve receber o en
 O código nativo de caneta, o decodificador e a entrada do UScreen continuam como referência. Não alterei nem compilei esses componentes nesta etapa. O próximo trabalho é preparar a compilação e uma primeira adaptação de conexão sem ADB, preservando a autorização de vídeo e entrada.
 
 Usei a documentação de [PointerEvent](https://developer.mozilla.org/en-US/docs/Web/API/PointerEvent) e [touch-action](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/touch-action) para preparar o diagnóstico. A arquitetura do aplicativo de referência está no [UScreen](https://github.com/majmichu1/UScreen/blob/66f6bcdab918b8dcc44227dde00197f30a778c44/docs/architecture.md). O relatório completo e os registros brutos ficam no computador.
+
+
+---
+
+<a id="etapa-10"></a>
+
+## Etapa 10: o aplicativo conectou sem ADB
+
+21/10/2026 — em andamento
+
+Comecei a adaptar o UScreen para usar a ancoragem USB. Já consegui instalar o aplicativo no S10 FE e conectar ao computador com a depuração desligada. Apareceu “Conexão USB confirmada”, o contador aumentou durante o teste e consegui encerrá-lo pelo tablet.
+
+Depois fiz testes de tela virtual e vídeo no próprio computador. Essa parte também avançou, mas ainda não apareceu imagem no tablet pelo cabo. A imagem confirmada no tablet continua sendo a do teste anterior com Miracast.
+
+### O que foi adaptado
+
+Usei o código do [UScreen neste commit](https://github.com/majmichu1/UScreen/tree/66f6bcdab918b8dcc44227dde00197f30a778c44). Preparei as ferramentas de Rust, Java e Android numa pasta de trabalho, sem instalar ADB nem substituir essas ferramentas no sistema. Compilei o programa Linux e o APK de teste, mantendo os créditos e a licença MIT da base.
+
+No caminho USB adaptado, o programa usa o endereço da rede da ancoragem e aceita a conexão do tablet escolhido. O aplicativo recebe um link com os dados da sessão, pede confirmação e conecta diretamente. A instalação e a abertura são manuais. A presença do tablet passa a ser acompanhada pela sessão autenticada, com verificação de conexão e limpeza ao desconectar, em vez de depender do monitor ADB.
+
+Mantive a autorização por token nos canais de vídeo e entrada. Os endereços e os dados de autorização ficam só nos arquivos locais de sessão. Isso é uma primeira adaptação em teste, sem uma revisão completa de segurança.
+
+Criei primeiro um modo de diagnóstico que recebe os eventos, mas não captura a tela nem injeta entrada no Linux. Assim consegui conferir a conexão sem movimentar o cursor ou criar uma tela a cada tentativa.
+
+### Os erros até conectar
+
+Na primeira versão o aplicativo abria e ficava aguardando, sem explicar o que tinha acontecido. Durante as tentativas, a rede USB foi recriada e o endereço do computador mudou. O link anterior continuava apontando para o endereço antigo.
+
+Acrescentei mensagens de estado e erro, uma opção para colar o link da sessão e a identificação da interface USB atual ao iniciar o teste. Instalei a segunda versão e usei o endereço atualizado. Foi nessa tentativa que apareceu a confirmação da conexão.
+
+Ainda preciso tratar a troca de endereço durante uma sessão e a reconexão automática. Identificar a rede ao iniciar não resolve todo o ciclo de tirar e recolocar o cabo.
+
+### O que o aplicativo enviou
+
+O computador registrou 1.895 mensagens: uma de resolução e 1.894 de touch. Foram até cinco dedos simultâneos, sem contatos ativos no fim do registro.
+
+Não chegou nenhum evento identificado como caneta nessa rodada. Portanto, pressão e inclinação da S Pen estão confirmadas apenas no teste pelo navegador da etapa anterior. Ainda não sei se a diferença veio do encaminhamento dos eventos no aplicativo ou de outro ponto do teste.
+
+Preparei uma terceira versão com mais informações sobre os eventos que o Android entrega, incluindo o tipo de ferramenta, a origem e os botões. Ela foi compilada e teve a assinatura verificada, mas ainda não foi instalada no tablet. O próximo teste precisa mostrar onde a caneta está sendo reconhecida antes de tentar corrigir essa parte.
+
+O modo de diagnóstico não desenha na tela nem controla os programas do computador. O contador confirma a chegada de mensagens, não o funcionamento de um pincel no Krita. Aproximação, botão lateral, rejeição de palma e alinhamento da entrada continuam pendentes.
+
+### Tela virtual e vídeo no computador
+
+Com a autorização no computador, carreguei o módulo EVDI que já estava instalado e concedi acesso temporário aos dispositivos necessários para o teste. Não configurei um serviço nem regras permanentes de permissão. O acesso temporário precisa ser revisto ao encerrar os testes; o módulo não foi removido à força.
+
+Encontrei um erro na procura do dispositivo de vídeo: o código descartava o índice zero. Corrigi a leitura do nome e acrescentei um teste para aceitar esse índice e rejeitar nomes inválidos. Depois disso consegui criar a tela virtual no KDE e passar pela captura, codificação H.264 por GPU e envio no formato usado pelo aplicativo.
+
+Usei um cliente simulado no próprio computador para receber o vídeo. Uma amostra teve 96 quadros em 1280 × 800; outra teve 95. As duas foram decodificadas sem erros. Isso verifica o caminho local até o recebimento e a leitura do H.264, mas ainda não testa a rede USB com vídeo nem o decodificador do tablet.
+
+Tentei também colocar um padrão animado na tela virtual. A sessão estava bloqueada durante a pausa, e a captura mostrou a tela de bloqueio. Por isso não considerei o teste de movimento concluído. A configuração tinha como alvo 30 quadros por segundo, mas não medi essa taxa com conteúdo em movimento. As confirmações do cliente simulado também não medem atraso até a imagem aparecer no tablet.
+
+### Conferências e próximos testes
+
+Na compilação de verificação da adaptação passaram 39 testes Rust e três testes Android. O teste em C para os nomes dos dispositivos também passou. Eles ajudam a conferir conexão, autorização e validação dos dados; não substituem o uso no tablet.
+
+Agora falta instalar a versão de diagnóstico da caneta, conferir os eventos nativos da S Pen e fazer o primeiro teste de vídeo USB no S10 FE. Depois preciso usar caneta e dedos nos aplicativos Linux, conferir a posição dos toques e testar a desconexão. Desempenho comparável ao aplicativo da Samsung no Windows ainda não foi demonstrado.
+
+O código adaptado, os APKs e os registros brutos continuam no computador. Esta atualização publica o andamento dos testes e os limites encontrados, sem os endereços da rede, os dados de sessão ou o inventário da máquina.

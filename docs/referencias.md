@@ -2,7 +2,7 @@
 
 Consulta feita em 21/10/2026.
 
-Reuni esses projetos para entender como cada um resolve a tela, o vídeo, a conexão e a entrada. Li a documentação, os trechos de código indicados abaixo e alguns relatos de uso. Ainda não instalei nem executei nenhum deles neste projeto.
+Reuni esses projetos para entender como cada um resolve a tela, o vídeo, a conexão e a entrada. Li a documentação, os trechos de código indicados abaixo e alguns relatos de uso. Essa leitura começou antes da execução dos projetos. Depois usei o UScreen como base para uma adaptação local, descrita na [etapa 10](testes.md#etapa-10). Os relatos abaixo distinguem o funcionamento da base dos testes feitos aqui.
 
 ## UScreen
 
@@ -24,6 +24,12 @@ O caminho a investigar primeiro é o compartilhamento de rede por USB. Para apro
 Encontrei o [relato de um S10 FE+ com KDE](https://github.com/majmichu1/UScreen/issues/23). O botão da S Pen não funcionava inicialmente; depois da correção no aplicativo Android, o usuário confirmou os eventos de pressionar e soltar. É uma referência útil, mas ainda não é um teste do meu S10 FE.
 
 Também olhei a [lista de compatibilidade](https://github.com/majmichu1/UScreen/blob/66f6bcdab918b8dcc44227dde00197f30a778c44/docs/compatibility.md). Há diferenças grandes de atraso entre aparelhos. Vou precisar medir aqui, sem assumir o resultado do hardware usado pelo autor.
+
+### A adaptação que comecei
+
+Na [etapa 10](testes.md#etapa-10), compilei e adaptei essa base para usar a ancoragem USB, com instalação e abertura manual do aplicativo e autorização da sessão, sem ADB nesse caminho. A segunda versão do APK conectou e enviou eventos de touch; a terceira acrescenta diagnóstico de caneta e ainda não foi instalada. A criação da tela virtual e o H.264 passaram por um teste com cliente simulado no computador. Vídeo no tablet e S Pen nativa continuam pendentes.
+
+Preservei os créditos e a [licença MIT do UScreen](https://github.com/majmichu1/UScreen/blob/66f6bcdab918b8dcc44227dde00197f30a778c44/LICENSE) na cópia local. O código adaptado e os APKs ainda não foram publicados neste repositório.
 
 ## TethrLink e o artigo sobre USB
 
@@ -85,7 +91,7 @@ Para acompanhar essa parte, estou usando a [documentação de caneta do Android]
 
 ## Versões consultadas
 
-Deixei os commits abaixo para conseguir voltar ao código que li. São versões de consulta, não versões instaladas neste projeto.
+Deixei os commits abaixo para conseguir voltar ao código que li. São as versões que consultei. O commit do UScreen também foi usado como base da adaptação local; isso não significa que os demais projetos foram instalados.
 
 | Projeto | Commit |
 | --- | --- |

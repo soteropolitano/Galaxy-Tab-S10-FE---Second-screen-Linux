@@ -2,23 +2,23 @@
 
 Prefiro usar o cabo sem ativar a depuração USB. A rede por ancoragem USB já funcionou no S10 FE e no Kubuntu: consegui abrir no tablet uma página servida pelo computador. O registro está na [etapa 08](testes.md#etapa-08).
 
-O UScreen continua como referência para tela, S Pen e touch no KDE, mas seu modo USB atual usa ADB. Preciso avaliar como aproveitar essas partes com outro transporte. O TethrLink ajuda a estudar a rede USB, mas depende do GNOME e não pode ser adotado diretamente para resolver a entrada no KDE.
+Já compilei uma adaptação do UScreen para conectar diretamente pela rede USB, sem ADB. O aplicativo de teste foi instalado manualmente e confirmou a conexão. Recebi até cinco dedos simultâneos no modo de diagnóstico. Também criei e capturei uma tela virtual no KDE, com H.264 recebido e decodificado num cliente simulado no próprio computador. O andamento está na [etapa 10](testes.md#etapa-10).
 
-Na [etapa 09](testes.md#etapa-09), recebi pelo navegador dados de pressão e inclinação da S Pen e até cinco dedos simultâneos. Ainda falta usar essa entrada no Linux. Também mapeei as dependências de ADB no UScreen.
+A S Pen ainda precisa ser conferida no aplicativo nativo. Pressão e inclinação chegaram pelo navegador na etapa 09, mas não apareceram como eventos de caneta na rodada do aplicativo. Preparei outra versão para observar o tipo e o encaminhamento dos eventos Android; ela ainda não foi instalada.
 
-Agora quero preparar o programa e o aplicativo:
+Os próximos passos são:
 
-1. Preparar e verificar as ferramentas para compilar o programa Linux e o aplicativo Android;
-2. Adaptar o endereço da conexão, a instalação e a abertura manual do cliente Android e a autorização da sessão, sem ADB;
-3. Substituir a detecção de presença feita pelo monitor ADB pelo acompanhamento da sessão autenticada, incluindo desconexão e liberação dos contatos;
-4. Restringir a escuta à rede escolhida e manter a autenticação para vídeo e entrada. Trocar o transporte não deve desligar a autorização da sessão;
-5. Compilar os dois lados e conferir a conexão antes de iniciar o teste de tela. Depois, conferir EVDI ou captura pelo portal, acesso ao uinput e codificação pela GPU.
+1. Instalar a versão de diagnóstico quando eu puder testar no tablet e observar separadamente caneta, dedos, aproximação e botão;
+2. Entender por que não chegaram eventos nativos de caneta e conferir como o Android distingue a S Pen dos dedos;
+3. Mostrar no tablet a tela virtual pelo cabo, começando em 1280 × 800 e com alvo de 30 quadros por segundo. Conferir movimento de verdade antes de avaliar resolução maior;
+4. Ligar a entrada à tela correta no KDE e testar nos aplicativos Linux;
+5. Conferir encerramento, liberação dos contatos e retirada da tela. Depois tratar mudanças de endereço e reconexão ao recolocar o cabo.
 
-A rede por cabo e a chegada de dados pelo navegador passaram nos primeiros testes. Vídeo e entrada no Linux continuam pendentes. O APK atual do UScreen não tem esse caminho pronto; observar eventos num navegador também não substitui testar o cliente Android e os aplicativos Linux.
+O vídeo local passou pela criação da tela, captura e codificação. Ainda falta testar o caminho completo até a imagem no S10 FE. Também preciso conferir o movimento com a sessão desbloqueada: a tentativa com padrão animado capturou a tela de bloqueio.
 
-Se alguma parte não funcionar, vou registrar onde parou e o erro que apareceu. Ao encerrar a etapa, entrego o relatório, explico as mudanças e como desfazê-las e paro antes de seguir.
+Por enquanto continuo com uma versão de teste local. Os relatórios completos e os registros brutos ficam no computador, e o andamento fica reunido no registro dos testes.
 
-## Depois da preparação
+## Com imagem no tablet
 
 Quero colocar uma janela no tablet, manter outra nas telas físicas e conferir que são áreas independentes. Depois disso, testar a entrada:
 
