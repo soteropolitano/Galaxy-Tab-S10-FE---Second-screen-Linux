@@ -1,0 +1,10 @@
+work/
+.env
+.env.*
+*.pcap
+*.pcapng
+*.log
+*.apk
+__pycache__/
+target/
+build/
