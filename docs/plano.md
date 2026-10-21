@@ -1,18 +1,18 @@
 # O que pretendo fazer agora
 
-Prefiro usar o cabo sem ativar a depuração USB. Vou começar conferindo o compartilhamento de rede por USB no S10 FE e no Kubuntu. Esse transporte ainda não foi testado aqui.
+Prefiro usar o cabo sem ativar a depuração USB. A rede por ancoragem USB já funcionou no S10 FE e no Kubuntu: consegui abrir no tablet uma página servida pelo computador. O registro está na [etapa 08](etapas/08-rede-usb-sem-depuracao.md).
 
 O UScreen continua como referência para tela, S Pen e touch no KDE, mas seu modo USB atual usa ADB. Preciso avaliar como aproveitar essas partes com outro transporte. O TethrLink ajuda a estudar a rede USB, mas depende do GNOME e não pode ser adotado diretamente para resolver a entrada no KDE.
 
-Na próxima etapa, quero preparar a conexão:
+Agora quero preparar a transmissão e a entrada:
 
-1. Manter a depuração USB desligada e conferir se o tablet oferece compartilhamento de rede pelo cabo;
-2. Verificar se o Kubuntu reconhece a interface, quais endereços foram recebidos e se há algum conflito com outras redes;
-3. Conferir a comunicação entre computador e tablet por essa interface, sem depender de ADB;
-4. Avaliar o que precisa mudar no programa e no aplicativo Android para conectar, abrir uma sessão e autorizar vídeo e entrada por essa rede. A instalação e a abertura do aplicativo no tablet devem ter um caminho manual, sem ADB;
-5. Definir o transporte antes de instalar os componentes da tela e da entrada. Depois, conferir EVDI ou captura pelo portal, acesso ao uinput, versões Linux/Android e codificação pela GPU.
+1. Observar os dados de toque e caneta enviados pelo tablet através da rede USB, num teste separado do controle do Linux;
+2. Mapear as dependências de ADB no UScreen. O modo Wi-Fi consultado também usa ADB, então não resolve sozinho a mudança de transporte;
+3. Preparar endereço do computador, instalação e abertura manual do cliente Android e autorização da sessão, sem ADB;
+4. Restringir a escuta à rede escolhida e manter a autenticação para vídeo e entrada. Trocar o transporte não deve desligar a autorização da sessão;
+5. Depois da adaptação, conferir EVDI ou captura pelo portal, acesso ao uinput e codificação pela GPU antes de testar uma tela independente.
 
-O primeiro teste é dessa rede por cabo. Ainda não é um teste completo de tela, caneta e touch. Não vou presumir que o APK atual do UScreen já funciona assim.
+A rede por cabo passou no primeiro teste. Vídeo e entrada no Linux continuam pendentes. Não vou presumir que o APK atual do UScreen já funciona assim; observar eventos num navegador também não substitui testar o cliente Android e os aplicativos Linux.
 
 Se alguma parte não funcionar, vou registrar onde parou e o erro que apareceu. Ao encerrar a etapa, entrego o relatório, explico as mudanças e como desfazê-las e paro antes de seguir.
 
