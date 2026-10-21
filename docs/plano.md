@@ -1,14 +1,18 @@
 # O que pretendo fazer agora
 
-Vou começar pelo USB com o UScreen. É o projeto que reuniu mais coisas do que preciso no KDE, mas ainda não foi testado aqui.
+Prefiro usar o cabo sem ativar a depuração USB. Vou começar conferindo o compartilhamento de rede por USB no S10 FE e no Kubuntu. Esse transporte ainda não foi testado aqui.
+
+O UScreen continua como referência para tela, S Pen e touch no KDE, mas seu modo USB atual usa ADB. Preciso avaliar como aproveitar essas partes com outro transporte. O TethrLink ajuda a estudar a rede USB, mas depende do GNOME e não pode ser adotado diretamente para resolver a entrada no KDE.
 
 Na próxima etapa, quero preparar a conexão:
 
-1. Conferir a versão e o que a instalação vai alterar;
-2. Verificar EVDI, compatibilidade com o kernel e Secure Boot, quando habilitado;
-3. Preparar ADB e o acesso ao uinput;
-4. Conferir se o programa Linux e o APK são de versões correspondentes;
-5. Ver se o tablet é reconhecido e se a GPU consegue codificar com os parâmetros usados pelo programa.
+1. Manter a depuração USB desligada e conferir se o tablet oferece compartilhamento de rede pelo cabo;
+2. Verificar se o Kubuntu reconhece a interface, quais endereços foram recebidos e se há algum conflito com outras redes;
+3. Conferir a comunicação entre computador e tablet por essa interface, sem depender de ADB;
+4. Avaliar o que precisa mudar no programa e no aplicativo Android para conectar, abrir uma sessão e autorizar vídeo e entrada por essa rede. A instalação e a abertura do aplicativo no tablet devem ter um caminho manual, sem ADB;
+5. Definir o transporte antes de instalar os componentes da tela e da entrada. Depois, conferir EVDI ou captura pelo portal, acesso ao uinput, versões Linux/Android e codificação pela GPU.
+
+O primeiro teste é dessa rede por cabo. Ainda não é um teste completo de tela, caneta e touch. Não vou presumir que o APK atual do UScreen já funciona assim.
 
 Se alguma parte não funcionar, vou registrar onde parou e o erro que apareceu. Ao encerrar a etapa, entrego o relatório, explico as mudanças e como desfazê-las e paro antes de seguir.
 

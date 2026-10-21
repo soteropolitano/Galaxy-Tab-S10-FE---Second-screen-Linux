@@ -22,6 +22,8 @@ Os projetos com XRandR e VNC ficam como referência para organizar telas. Para o
 
 Nesta etapa não instalei nenhum deles nem iniciei outra conexão com o tablet. Fiz o estudo, algumas consultas de preparação e organizei a documentação no GitHub. O inventário do computador ficou no relatório local.
 
-Vou começar preparando o USB com UScreen: conferir EVDI, ADB, acesso ao uinput, versões do programa e do APK e o caminho da GPU. Depois quero testar a tela independente, o touch e os dados da S Pen, cada um com sua verificação.
+Depois desse estudo, corrigi a preferência de conexão: quero usar o cabo com a depuração USB desligada. O fluxo acima descreve como o UScreen funciona hoje; não é o transporte escolhido para o próximo teste.
+
+Vou começar conferindo o compartilhamento de rede por USB, sem ADB. O UScreen fica como referência para tela e entrada no KDE, mas ainda preciso avaliar as adaptações do programa e do aplicativo Android para esse transporte. Depois quero testar a tela independente, o touch e os dados da S Pen, cada um com sua verificação. O [plano](../plano.md) foi atualizado com essa sequência.
 
 O Miracast continua no projeto. Conseguir vídeo pela função nativa da Samsung ainda não resolveu o retorno da caneta e dos dedos.

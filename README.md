@@ -1,6 +1,6 @@
 # Galaxy Tab S10 FE como segunda tela no Linux
 
-Estou tentando usar meu Galaxy Tab S10 FE como segunda tela no Kubuntu, com a S Pen e o touch funcionando também. Se conseguir usar por USB, melhor ainda.
+Estou tentando usar meu Galaxy Tab S10 FE como segunda tela no Kubuntu, com a S Pen e o touch funcionando também. Prefiro conectar por cabo, mantendo a depuração USB desligada no tablet.
 
 A primeira tentativa foi com VNC. Não gostei da experiência, então comecei a testar o GNOME Network Displays para conectar pelo recurso “Segunda tela” da Samsung.
 
@@ -18,7 +18,7 @@ Essa transmissão foi curta, cerca de 43 segundos entre o início do vídeo e a 
 
 ## S Pen, touch e USB
 
-Comecei a olhar outros projetos para entender como fizeram essas partes. O [UScreen](https://github.com/majmichu1/UScreen) parece o caminho mais próximo do que estou procurando: tem aplicativo Android, conexão USB por ADB, tela estendida e código para levar pressão, inclinação e botão da caneta ao Linux, além do touch.
+Comecei a olhar outros projetos para entender como fizeram essas partes. O [UScreen](https://github.com/majmichu1/UScreen) é uma referência útil para a tela e a entrada no KDE: tem aplicativo Android, tela estendida e código para levar pressão, inclinação e botão da caneta ao Linux, além do touch. O USB dele ainda usa ADB e exige depuração, então essa parte precisa de outro caminho para atender ao que quero.
 
 Encontrei também um [relato com S10 FE+ no KDE](https://github.com/majmichu1/UScreen/issues/23), com a confirmação de uma correção no botão da S Pen. Isso ajuda, mas ainda preciso testar no meu S10 FE.
 
@@ -30,7 +30,9 @@ Quero conferir algumas coisas:
 - Apoiar a mão enquanto desenho sem provocar cliques e rolagens;
 - Desconectar sem deixar uma tela virtual ou algum toque preso.
 
-Vou começar pelo caminho USB do UScreen. Nesse caso, o cabo leva os dados para o aplicativo Android usando ADB e exige depuração USB. Outros projetos fazem isso por compartilhamento de rede USB. Não são o mesmo procedimento.
+Vou priorizar o compartilhamento de rede por USB, também chamado de USB tethering. A ideia é levar vídeo e entrada por essa rede, com a depuração desligada. Ainda preciso confirmar o funcionamento no S10 FE e escolher ou adaptar o programa Linux e o aplicativo Android para esse transporte.
+
+O UScreen continua como referência para caneta e touch. Só ativar o compartilhamento USB não muda o transporte dele: conexão, abertura do aplicativo e autorização da sessão também precisam funcionar sem ADB.
 
 O caminho sem fio continua no plano. O Miracast já deu imagem, mas a entrada pela função nativa da Samsung ainda precisa ser investigada. O próprio UScreen também tem uma opção Wi-Fi para testar depois.
 

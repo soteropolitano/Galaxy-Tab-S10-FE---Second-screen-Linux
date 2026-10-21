@@ -17,6 +17,10 @@ Fui conferir no código como a entrada é tratada:
 
 A [arquitetura](https://github.com/majmichu1/UScreen/blob/66f6bcdab918b8dcc44227dde00197f30a778c44/docs/architecture.md) descreve vídeo por TCP e entrada por WebSocket, em portas locais encaminhadas pelo `adb reverse`. Esse caminho não exige compartilhamento de rede USB.
 
+Corrigi a preferência do projeto depois dessa leitura: quero o cabo com a depuração USB desligada. O modo USB atual do UScreen exige ADB, então vou usá-lo como referência para tela e entrada e avaliar outro transporte. A documentação dele coloca o transporte AOA, para remover essa exigência, entre os próximos trabalhos; não considerei isso um recurso já disponível.
+
+O caminho a investigar primeiro é o compartilhamento de rede por USB. Para aproveitar o UScreen assim, preciso conferir conexão entre os aplicativos, endereços, abertura e autorização da sessão sem depender do ADB. Só ativar a rede USB no tablet não faz essa adaptação.
+
 Encontrei o [relato de um S10 FE+ com KDE](https://github.com/majmichu1/UScreen/issues/23). O botão da S Pen não funcionava inicialmente; depois da correção no aplicativo Android, o usuário confirmou os eventos de pressionar e soltar. É uma referência útil, mas ainda não é um teste do meu S10 FE.
 
 Também olhei a [lista de compatibilidade](https://github.com/majmichu1/UScreen/blob/66f6bcdab918b8dcc44227dde00197f30a778c44/docs/compatibility.md). Há diferenças grandes de atraso entre aparelhos. Vou precisar medir aqui, sem assumir o resultado do hardware usado pelo autor.
@@ -26,6 +30,8 @@ Também olhei a [lista de compatibilidade](https://github.com/majmichu1/UScreen/
 O [artigo enviado](https://medium.com/@princesavsaviya2023.learning/i-turned-my-android-tablet-into-a-real-second-monitor-over-a-usb-cable-962c4c2e9758) leva ao [TethrLink](https://github.com/princesavsaviya/TethrLink). Ele usa uma rede criada pelo compartilhamento USB, tela virtual e H.264. As ideias de testar o codificador, controlar filas e respeitar a proporção da tela ajudam no estudo.
 
 A entrada, porém, está ligada ao GNOME. O arquivo [remote_input.py](https://github.com/princesavsaviya/TethrLink/blob/75a66798bb10aee0d883dba3ef1a2360f72a5c73/server/core/remote_input.py) usa `org.gnome.Mutter.RemoteDesktop`. No [protocolo](https://github.com/princesavsaviya/TethrLink/blob/75a66798bb10aee0d883dba3ef1a2360f72a5c73/server/core/input_protocol.py), encontrei movimento de ponteiro, botão e rolagem, mas não campos de pressão e inclinação.
+
+Com a preferência por cabo sem depuração, essa referência de rede USB passa a ter mais peso. Isso não muda a dependência de GNOME da implementação atual nem resolve a S Pen no KDE por si só.
 
 Portanto, não consigo usar esse caminho diretamente no KDE para atender à caneta que quero. Converter gestos em cliques e rolagem também é diferente de enviar contatos de toque separados.
 
