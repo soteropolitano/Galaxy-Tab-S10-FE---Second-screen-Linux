@@ -34,6 +34,8 @@ O compartilhamento de rede por USB, também chamado de USB tethering, já funcio
 
 Ainda preciso levar vídeo e entrada por essa rede e adaptar o programa Linux e o aplicativo Android para esse transporte. A conexão pelo cabo foi validada; a transmissão da tela por USB ainda está pendente.
 
+Fiz também um teste separado pelo navegador: o computador recebeu pressão e inclinação da S Pen e até cinco dedos simultâneos pela rede USB. Ainda não liguei esses eventos à entrada do Linux. Aproximação, botão lateral e rejeição de palma continuam pendentes. Os resultados estão na [etapa 09](docs/etapas/09-spen-e-touch-pelo-cabo.md).
+
 O UScreen continua como referência para caneta e touch. Só ativar o compartilhamento USB não muda o transporte dele: conexão, abertura do aplicativo e autorização da sessão também precisam funcionar sem ADB. O modo Wi-Fi que consultei também usa ADB.
 
 O caminho sem fio continua no plano. O Miracast já deu imagem, mas a entrada pela função nativa da Samsung ainda precisa ser investigada. O próprio UScreen também tem uma opção Wi-Fi para testar depois.
@@ -50,7 +52,8 @@ Estou fazendo por etapas, com um registro do que aconteceu e uma pausa antes de 
 6. [Primeira imagem](docs/etapas/06-primeira-imagem.md)
 7. [Estudo de S Pen, touch e USB](docs/etapas/07-caneta-touch-usb.md)
 8. [Rede USB sem depuração](docs/etapas/08-rede-usb-sem-depuracao.md)
+9. [S Pen e touch pela rede USB](docs/etapas/09-spen-e-touch-pelo-cabo.md)
 
 O [plano de testes](docs/plano.md) mostra o que pretendo fazer em seguida. A comparação dos projetos, os arquivos que consultei e os créditos estão nas [referências](docs/referencias.md).
 
-Ainda não há um aplicativo próprio pronto para instalar neste repositório. A base Miracast usada é o [GNOME Network Displays](https://gitlab.gnome.org/GNOME/gnome-network-displays), no commit `c305023f1e6d8ab48d18c66a4efbd18e1df7cdee`, sem alterações no código até a etapa 08.
+Ainda não há um aplicativo próprio pronto para instalar neste repositório. A base Miracast usada é o [GNOME Network Displays](https://gitlab.gnome.org/GNOME/gnome-network-displays), no commit `c305023f1e6d8ab48d18c66a4efbd18e1df7cdee`, sem alterações no código até a etapa 09.

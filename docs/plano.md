@@ -4,15 +4,17 @@ Prefiro usar o cabo sem ativar a depuração USB. A rede por ancoragem USB já f
 
 O UScreen continua como referência para tela, S Pen e touch no KDE, mas seu modo USB atual usa ADB. Preciso avaliar como aproveitar essas partes com outro transporte. O TethrLink ajuda a estudar a rede USB, mas depende do GNOME e não pode ser adotado diretamente para resolver a entrada no KDE.
 
-Agora quero preparar a transmissão e a entrada:
+Na [etapa 09](etapas/09-spen-e-touch-pelo-cabo.md), recebi pelo navegador dados de pressão e inclinação da S Pen e até cinco dedos simultâneos. Ainda falta usar essa entrada no Linux. Também mapeei as dependências de ADB no UScreen.
 
-1. Observar os dados de toque e caneta enviados pelo tablet através da rede USB, num teste separado do controle do Linux;
-2. Mapear as dependências de ADB no UScreen. O modo Wi-Fi consultado também usa ADB, então não resolve sozinho a mudança de transporte;
-3. Preparar endereço do computador, instalação e abertura manual do cliente Android e autorização da sessão, sem ADB;
+Agora quero preparar o programa e o aplicativo:
+
+1. Preparar e verificar as ferramentas para compilar o programa Linux e o aplicativo Android;
+2. Adaptar o endereço da conexão, a instalação e a abertura manual do cliente Android e a autorização da sessão, sem ADB;
+3. Substituir a detecção de presença feita pelo monitor ADB pelo acompanhamento da sessão autenticada, incluindo desconexão e liberação dos contatos;
 4. Restringir a escuta à rede escolhida e manter a autenticação para vídeo e entrada. Trocar o transporte não deve desligar a autorização da sessão;
-5. Depois da adaptação, conferir EVDI ou captura pelo portal, acesso ao uinput e codificação pela GPU antes de testar uma tela independente.
+5. Compilar os dois lados e conferir a conexão antes de iniciar o teste de tela. Depois, conferir EVDI ou captura pelo portal, acesso ao uinput e codificação pela GPU.
 
-A rede por cabo passou no primeiro teste. Vídeo e entrada no Linux continuam pendentes. Não vou presumir que o APK atual do UScreen já funciona assim; observar eventos num navegador também não substitui testar o cliente Android e os aplicativos Linux.
+A rede por cabo e a chegada de dados pelo navegador passaram nos primeiros testes. Vídeo e entrada no Linux continuam pendentes. O APK atual do UScreen não tem esse caminho pronto; observar eventos num navegador também não substitui testar o cliente Android e os aplicativos Linux.
 
 Se alguma parte não funcionar, vou registrar onde parou e o erro que apareceu. Ao encerrar a etapa, entrego o relatório, explico as mudanças e como desfazê-las e paro antes de seguir.
 
