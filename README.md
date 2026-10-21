@@ -44,7 +44,7 @@ O caminho sem fio continua no plano. O Miracast já deu imagem, mas a entrada pe
 
 Estou fazendo por etapas, com um registro do que aconteceu e uma pausa antes de continuar. Os relatórios completos ficam salvos no meu computador; aqui ficam as explicações sem os endereços da rede e o inventário do computador.
 
-Reuni as nove etapas no [registro dos testes](docs/testes.md), da escolha da base aos testes de caneta e dedos pelo cabo.
+Reuni as etapas no [registro dos testes](docs/testes.md), da escolha da base aos testes de caneta e dedos pelo cabo.
 
 O [plano de testes](docs/plano.md) mostra o que pretendo fazer em seguida. A comparação dos projetos, os arquivos que consultei e os créditos estão nas [referências](docs/referencias.md).
 
