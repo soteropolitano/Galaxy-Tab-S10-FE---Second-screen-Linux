@@ -38,7 +38,7 @@ O caminho sem fio continua no plano. O Miracast já deu imagem, mas a entrada pe
 
 ## Como estou organizando
 
-Estou fazendo por etapas, com um registro do que aconteceu e uma pausa antes de continuar. Os relatórios completos são entregues localmente; aqui ficam as explicações sem os endereços da rede e o inventário do computador.
+Estou fazendo por etapas, com um registro do que aconteceu e uma pausa antes de continuar. Os relatórios completos ficam salvos no meu computador; aqui ficam as explicações sem os endereços da rede e o inventário do computador.
 
 1. [Escolha da base e diagnóstico](docs/etapas/01-base-e-diagnostico.md)
 2. [Compilação e primeira abertura](docs/etapas/02-compilacao.md)
