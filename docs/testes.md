@@ -597,4 +597,4 @@ Queria um nome que também ajudasse a encontrar o projeto ao pesquisar sobre tab
 
 A atualização do aplicativo com o nome novo foi preparada como teste 11. O nome aparece na abertura, na lista de aplicativos e na notificação da conexão. A identificação da bandeja do PC também foi atualizada. A instalação e a assinatura foram mantidas compatíveis com as versões anteriores, para atualizar o app existente.
 
-Os créditos e a licença do UScreen continuam preservados. Os testes de conexão, desenho, áudio e modos de tela anteriores continuam registrados acima. A conferência do nome no aparelho fica para a instalação desta atualização.
+Os créditos e a licença do UScreen continuam preservados. Os testes de conexão, desenho, áudio e modos de tela anteriores continuam registrados acima. Instalei o teste 11 no S10 FE e confirmei que o aplicativo aparece como **Galaxy Tab Screen**. O APK continua disponível apenas nas páginas locais de teste, sem publicação no GitHub.
