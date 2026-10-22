@@ -1,4 +1,4 @@
-# Testes do Galaxy Tab S10 FE no Linux
+# Testes do Galaxy Tab Screen
 
 Reuni aqui os registros que estavam separados por etapa. O caminho começou pelo Miracast e chegou à tela independente pelo cabo e pelo Wi-Fi, com S Pen, touch e som no Linux. A depuração USB continua desligada.
 
@@ -23,6 +23,7 @@ Até 22/10/2026, consegui usar o Krita pelo cabo e pelo Wi-Fi, com pressão, inc
 15. [Etapa 15: Krita pelo cabo](#etapa-15)
 16. [Etapa 16: Krita pelo Wi-Fi](#etapa-16)
 17. [Etapa 17: resolução, Hz e sincronização](#etapa-17)
+18. [Etapa 18: o nome do projeto](#etapa-18)
 
 ---
 
@@ -581,3 +582,19 @@ A validação no aparelho foi pelo Wi-Fi, sem cabo. As configurações USB foram
 Configurar 90 Hz e o codificador a 90 fps não comprova que todos os quadros serão exibidos nessa taxa em qualquer situação. Não retomei a investigação de fluidez nem fiz comparação medida com o aplicativo da Samsung no Windows.
 
 O código adaptado, os APKs, os desenhos e os relatórios completos continuam salvos no computador. Os testes seguem reunidos neste documento.
+
+---
+
+<a id="etapa-18"></a>
+
+## Etapa 18: o projeto passou a se chamar Galaxy Tab Screen
+
+22/10/2026
+
+Escolhi **Galaxy Tab Screen** como nome do projeto e do aplicativo. O repositório passou a ser `galaxy-tab-screen-linux` e o título do README ficou **Galaxy Tab Screen — Samsung Galaxy Tab como segunda tela no Linux**.
+
+Queria um nome que também ajudasse a encontrar o projeto ao pesquisar sobre tablet Samsung como segunda tela no Linux. A descrição mantém os recursos que já testei: S Pen, touch, áudio, USB sem depuração e Wi-Fi. O nome não promete uma posição nas buscas.
+
+A atualização do aplicativo com o nome novo foi preparada como teste 11. O nome aparece na abertura, na lista de aplicativos e na notificação da conexão. A identificação da bandeja do PC também foi atualizada. A instalação e a assinatura foram mantidas compatíveis com as versões anteriores, para atualizar o app existente.
+
+Os créditos e a licença do UScreen continuam preservados. Os testes de conexão, desenho, áudio e modos de tela anteriores continuam registrados acima. A conferência do nome no aparelho fica para a instalação desta atualização.

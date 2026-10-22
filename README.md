@@ -1,10 +1,14 @@
-# Galaxy Tab S10 FE como segunda tela no Linux
+# Galaxy Tab Screen — Samsung Galaxy Tab como segunda tela no Linux
 
-Estou usando meu Galaxy Tab S10 FE como segunda tela no Kubuntu, com S Pen, touch e som pelo cabo ou pelo Wi-Fi. Pelo cabo, mantenho a depuração USB desligada.
+O **Galaxy Tab Screen** é o projeto que estou desenvolvendo para usar meu Samsung Galaxy Tab como segunda tela no Linux. Os testes são com um **Galaxy Tab S10 FE no Kubuntu/KDE Plasma**.
+
+Já uso a tela independente com S Pen, touch e som pelo cabo ou pelo Wi-Fi. Pelo cabo, mantenho a depuração USB desligada.
 
 Comecei com VNC, mas não gostei da experiência. Depois consegui imagem pelo “Segunda tela” da Samsung, usando o GNOME Network Displays. Funcionou em espelhamento. Para seguir com tela independente, caneta e dedos, comecei uma adaptação do [UScreen](https://github.com/majmichu1/UScreen).
 
 Já consegui desenhar no Krita com pressão e inclinação da S Pen, apoiar a mão sem interferência nas rodadas e usar dois dedos para mover e ampliar a folha. O computador também oferece uma saída de som para o tablet. Agora a tela chegou à resolução nativa, **2304 × 1440 a 90 Hz**, e posso escolher resolução e atualização pelo PC ou pelo aplicativo.
+
+Escolhi o nome **Galaxy Tab Screen**. O repositório ficou como `galaxy-tab-screen-linux`, com o título explicando o objetivo de usar o tablet Samsung como segunda tela no Linux.
 
 Estou deixando o processo aqui porque quero aprender durante o desenvolvimento e entender os problemas que forem aparecendo.
 
