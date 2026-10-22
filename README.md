@@ -12,6 +12,8 @@ Escolhi o nome **Galaxy Tab Screen**. O repositório ficou como `galaxy-tab-scre
 
 Estou deixando o processo aqui porque quero aprender durante o desenvolvimento e entender os problemas que forem aparecendo.
 
+Esse projeto também vem sendo construído com a colaboração de [Edmundo Neto](https://github.com/emal0n). A troca de ideias sobre desenvolvimento e produto ajuda a pensar nas próximas etapas.
+
 ## O que já funcionou
 
 | Parte | O que conferi no S10 FE |
