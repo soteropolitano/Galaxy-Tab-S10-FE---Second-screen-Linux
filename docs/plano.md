@@ -1,45 +1,34 @@
 # O que pretendo fazer agora
 
-Prefiro usar o cabo sem ativar a depuração USB. A rede por ancoragem USB já funcionou no S10 FE e no Kubuntu: consegui abrir no tablet uma página servida pelo computador. O registro está na [etapa 08](testes.md#etapa-08).
+Já consegui a tela independente pelo cabo, com a depuração USB desligada, desenho com pressão da S Pen e até cinco dedos no Linux. Também testei a retirada do cabo e a reconexão automática na mesma porta, mantendo o endereço usado pelo aplicativo.
 
-Já compilei uma adaptação do UScreen para conectar diretamente pela rede USB, sem ADB. O aplicativo de teste foi instalado manualmente e confirmou a conexão. Recebi até cinco dedos simultâneos no modo de diagnóstico. Também criei e capturei uma tela virtual no KDE, com H.264 recebido e decodificado num cliente simulado no próprio computador. O andamento está na [etapa 10](testes.md#etapa-10).
+A mudança para 90 fps e 60 Mbps melhorou muito a fluidez, mantendo 1280 × 800. Vou manter esses valores e seguir com o uso. A investigação de lentidão fica encerrada por enquanto, como registrei na [etapa 12](testes.md#etapa-12).
 
-A S Pen ainda precisa ser conferida no aplicativo nativo. Pressão e inclinação chegaram pelo navegador na etapa 09, mas não apareceram como eventos de caneta na rodada do aplicativo. Preparei outra versão para observar o tipo e o encaminhamento dos eventos Android; ela ainda não foi instalada.
+Vou manter também o mesmo endereço de conexão. Se houver conflito ou mudança da sub-rede, preciso conferir antes de trocar. A reserva atual foi validada na porta USB usada nos testes.
 
-Os próximos passos são:
+## Caneta e touch no uso diário
 
-1. Instalar a versão de diagnóstico quando eu puder testar no tablet e observar separadamente caneta, dedos, aproximação e botão;
-2. Entender por que não chegaram eventos nativos de caneta e conferir como o Android distingue a S Pen dos dedos;
-3. Mostrar no tablet a tela virtual pelo cabo, começando em 1280 × 800 e com alvo de 30 quadros por segundo. Conferir movimento de verdade antes de avaliar resolução maior;
-4. Ligar a entrada à tela correta no KDE e testar nos aplicativos Linux;
-5. Conferir encerramento, liberação dos contatos e retirada da tela. Depois tratar mudanças de endereço e reconexão ao recolocar o cabo.
+A área de desenho no Linux já recebeu pressão, inclinação, aproximação, botão e contatos separados dos dedos. Agora falta sair desse teste controlado:
 
-O vídeo local passou pela criação da tela, captura e codificação. Ainda falta testar o caminho completo até a imagem no S10 FE. Também preciso conferir o movimento com a sessão desbloqueada: a tentativa com padrão animado capturou a tela de bloqueio.
-
-Por enquanto continuo com uma versão de teste local. Os relatórios completos e os registros brutos ficam no computador, e o andamento fica reunido no registro dos testes.
-
-## Com imagem no tablet
-
-Quero colocar uma janela no tablet, manter outra nas telas físicas e conferir que são áreas independentes. Depois disso, testar a entrada:
-
-| Parte | Teste |
+| Parte | O que quero conferir |
 | --- | --- |
-| Touch | Tocar e arrastar nos cantos e no centro |
-| Mais de um dedo | Conferir os contatos e usar gestos num aplicativo que os aceite |
-| Pressão | Conferir valores diferentes e variar a espessura do traço no Krita |
-| Inclinação | Conferir os eixos com um pincel preparado para responder à inclinação |
-| Aproximação da S Pen | Mover o cursor sem encostar a ponta |
-| Botão | Pressionar e soltar com a caneta próxima e durante o desenho |
-| Mão apoiada | Desenhar e observar se aparecem cliques ou rolagens indevidos |
-| Posição e escala | Conferir o alinhamento entre as telas e depois testar a rotação |
-| Desconexão | Tirar o cabo e conferir se a tela e os contatos são liberados |
+| Pressão | Desenhar no Krita e ajustar o pincel ao uso |
+| Inclinação | Usar um pincel que responda aos eixos recebidos |
+| Botão lateral | Conferir a ação nos programas de desenho |
+| Mão apoiada | Variar posição e sequência de aproximação da caneta e da mão |
+| Multitouch | Testar gestos num aplicativo que os aceite |
+| Posição e escala | Conferir cantos, outras escalas e rotação |
 
-Se houver evento de borracha, preciso ver se a caneta e o Android realmente o enviam. Ter o campo no código não cria uma função física no aparelho.
+O teste curto com a mão apoiada passou, mas ainda não cobre todas as condições de uso. Se houver evento de borracha, preciso conferir se a caneta e o Android realmente o enviam.
 
-## Sem fio e desempenho
+## Estabilidade e instalação
 
-O Miracast já transmitiu imagem. Ainda tenho que resolver a colisão de endereços, conseguir a tela independente e investigar a entrada. O UScreen também oferece Wi-Fi; vou tratar essa conexão como outro teste.
+A retirada com contato ativo já liberou a entrada e retirou a tela virtual. A reconexão também funcionou mantendo o aplicativo aberto e reativando a Ancoragem USB. Quero repetir esse ciclo, testar sessões mais longas e conferir o retorno depois de suspender ou fechar o aplicativo.
 
-Quando imagem e entrada estiverem corretas, pretendo comparar atraso, nitidez, estabilidade e uso de CPU/GPU, mantendo computador, tablet, resolução e conteúdo. Os números de outros projetos não dizem qual será o resultado aqui.
+Por enquanto a instalação é manual e as permissões de dispositivos foram preparadas para os testes. Ainda preciso organizar instalação, abertura, encerramento e autorização antes de publicar algo pronto para uso. O código adaptado e os APKs continuam locais.
 
-A interface própria fica para depois dessas verificações. Primeiro preciso saber o que ela vai conseguir controlar.
+## Sem fio
+
+O Miracast transmitiu imagem em espelhamento. Nesse caminho ainda falta resolver a colisão de endereços, conseguir a tela independente e investigar o retorno da caneta e dos dedos. A opção Wi-Fi do UScreen também fica para uma rodada própria.
+
+Os testes e as correções continuam no [registro único](testes.md). Os relatórios completos ficam salvos no meu computador.

@@ -1,8 +1,10 @@
 # Testes do Galaxy Tab S10 FE no Linux
 
-Reuni aqui os registros que estavam separados por etapa. O caminho começou pelo Miracast e chegou à rede USB com a depuração desligada, incluindo os testes pelo navegador, a adaptação do aplicativo Android e os primeiros testes locais de vídeo.
+Reuni aqui os registros que estavam separados por etapa. O caminho começou pelo Miracast e chegou à tela independente pelo cabo, com a depuração USB desligada, S Pen e touch no Linux.
 
-Os relatos seguem a ordem em que fiz os testes, com os erros, as correções e o que ainda faltava em cada momento. Até agora consegui imagem por Miracast, em espelhamento, e dados de caneta e touch pela rede USB. O aplicativo Android adaptado também já conectou sem ADB e enviou touch. Consegui criar e capturar uma tela virtual num teste local, mas ainda falta exibi-la no tablet pelo cabo e usar a entrada nos aplicativos Linux.
+Os relatos seguem a ordem em que fiz os testes, com os erros, as correções e o que ainda faltava em cada momento. As pendências dos primeiros relatos devem ser lidas como o estado daquela tentativa. As continuações mostram o que consegui resolver depois.
+
+Até 22/10/2026, já consegui desenhar com pressão, usar até cinco dedos e reconectar automaticamente após retirar e recolocar o cabo. Depois de mudar para 90 fps e 60 Mbps, percebi uma melhora grande na fluidez e decidi manter a configuração.
 
 1. [Etapa 01: escolhendo a base](#etapa-01)
 2. [Etapa 02: compilando e abrindo](#etapa-02)
@@ -14,6 +16,8 @@ Os relatos seguem a ordem em que fiz os testes, com os erros, as correções e o
 8. [Etapa 08: a rede pelo cabo funcionou](#etapa-08)
 9. [Etapa 09: S Pen e dedos pelo cabo](#etapa-09)
 10. [Etapa 10: o aplicativo conectou sem ADB](#etapa-10)
+11. [Etapa 11: retirar o cabo e conectar de novo](#etapa-11)
+12. [Etapa 12: a mudança para 90 Hz](#etapa-12)
 
 ---
 
@@ -261,7 +265,9 @@ Usei a documentação de [PointerEvent](https://developer.mozilla.org/en-US/docs
 
 ## Etapa 10: o aplicativo conectou sem ADB
 
-21/10/2026 — em andamento
+21 e 22/10/2026
+
+Os primeiros testes abaixo foram feitos em 21/10. A continuação com imagem e entrada no tablet está no fim desta etapa.
 
 Comecei a adaptar o UScreen para usar a ancoragem USB. Já consegui instalar o aplicativo no S10 FE e conectar ao computador com a depuração desligada. Apareceu “Conexão USB confirmada”, o contador aumentou durante o teste e consegui encerrá-lo pelo tablet.
 
@@ -312,3 +318,116 @@ Na compilação de verificação da adaptação passaram 39 testes Rust e três 
 Agora falta instalar a versão de diagnóstico da caneta, conferir os eventos nativos da S Pen e fazer o primeiro teste de vídeo USB no S10 FE. Depois preciso usar caneta e dedos nos aplicativos Linux, conferir a posição dos toques e testar a desconexão. Desempenho comparável ao aplicativo da Samsung no Windows ainda não foi demonstrado.
 
 O código adaptado, os APKs e os registros brutos continuam no computador. Esta atualização publica o andamento dos testes e os limites encontrados, sem os endereços da rede, os dados de sessão ou o inventário da máquina.
+
+
+### Continuação em 22/10: apareceu imagem pelo cabo
+
+Instalei a terceira versão de diagnóstico e fiz uma rodada só com a S Pen. Chegaram 3.057 eventos nativos de caneta, com pressão, inclinação e aproximação. A ausência de caneta na rodada anterior não se repetiu; aquele resultado não era suficiente para concluir que o aplicativo não reconhecia a S Pen.
+
+Na primeira tentativa de vídeo, o aplicativo ficou aguardando ou com a tela preta. Acrescentei informações de erro e adiei a preparação do decodificador até receber os parâmetros da sessão. A mensagem mostrada na versão de teste 4 revelou outro problema: a conexão de vídeo estava tentando usar a porta zero.
+
+Esse erro estava na adaptação. Dentro de `Socket().apply`, o nome `port` apontava para a propriedade do próprio socket, ainda sem destino, em vez da porta recebida na sessão. Separei o destino da criação da conexão e acrescentei um teste com uma conexão TCP local real, além da rejeição de porta zero.
+
+Instalei o teste 5 e apareceu imagem no S10 FE. A tela virtual de 1280 × 800 passou pelo EVDI, pela codificação H.264 na GPU e pela rede USB até o aplicativo Android. A depuração continuou desligada.
+
+### Caneta e dedos desenhando no Linux
+
+Abri uma área de desenho GTK na tela virtual. Dessa vez o teste usou os dispositivos virtuais de entrada do Linux: os eventos passaram pelo aplicativo Android, pelo programa no computador e pelo KDE até a área de desenho.
+
+| Rodada | Resultado |
+| --- | --- |
+| S Pen sem apoiar a mão | O traço acompanhou a ponta e mudou de espessura conforme a pressão |
+| Inclinação e aproximação | Chegaram à área de teste no Linux |
+| Dedos com a caneta afastada | Até cinco contatos simultâneos; as marcas ficaram alinhadas aos toques |
+| Mão apoiada com a caneta próxima | Consegui desenhar sem interferência; não chegaram eventos de dedos nessa rodada |
+| Botão lateral | A área Linux recebeu 16 pares de pressionar e soltar; não abriu menu da Samsung |
+| Fim da rodada de touch | Nenhum contato ficou ativo no registro |
+
+O teste com a mão apoiada foi feito aproximando primeiro a S Pen e mantendo a ponta perto da tela entre os traços. Ainda preciso variar a sequência e a posição da mão. Receber inclinação também não substitui conferir o efeito num pincel preparado para responder a ela.
+
+A tela do tablet era uma área adicional do KDE. As configurações das telas físicas foram preservadas. Depois, organizei a tela virtual abaixo da principal.
+
+### Encerramento e verificações
+
+No encerramento por prazo do programa, a tela virtual foi retirada e os dispositivos de entrada foram destruídos. As telas físicas conservaram a configuração. A retirada física do cabo ficou para a etapa seguinte.
+
+Depois da correção da conexão de vídeo, passaram os cinco testes Android, e a assinatura do APK foi conferida. O teste em C para os nomes dos dispositivos também continuou passando. Os resultados com o aparelho confirmam imagem e entrada nessa configuração, mas ainda não demonstram estabilidade prolongada ou desempenho igual ao aplicativo da Samsung no Windows.
+
+O módulo EVDI permaneceu carregado, sem remoção forçada, e os acessos preparados para os dispositivos continuaram temporários. Não configurei serviço nem regras permanentes de permissão.
+
+---
+
+<a id="etapa-11"></a>
+
+## Etapa 11: retirar o cabo e conectar de novo
+
+22/10/2026
+
+Com a imagem funcionando, fiz um teste de retirada do cabo enquanto mantinha um dedo encostado na área de desenho. Queria conferir se o Linux soltava o contato e retirava a tela virtual, além de ver o que o aplicativo mostrava.
+
+### A primeira retirada
+
+O tablet ficou com a última imagem. No primeiro relato pareceu que alguma tela tinha travado, mas conferi depois: foi só a imagem no tablet; as telas do computador continuaram normais.
+
+O computador levou cerca de dez segundos para liberar o contato e retirar a tela virtual. O encerramento ainda dependia do prazo de verificação da conexão. Precisava detectar a retirada antes e explicar o estado no aplicativo.
+
+### O que corrigi e como repeti
+
+O programa Linux passou a verificar a presença da rede USB a cada 200 ms. Ao perder essa rede, encerra o canal de controle e libera os contatos da sessão. Acrescentei uma verificação local para esse caminho de encerramento.
+
+No Android, acrescentei a observação do estado USB e o aviso de cabo desconectado. Corrigi também a interface ao parar o vídeo, para a última imagem não continuar aparecendo como se a conexão estivesse ativa.
+
+Passaram 40 testes Rust e cinco testes Android. Compilei o teste 6, conferi a assinatura e instalei a atualização manualmente no S10 FE, ainda sem depuração USB.
+
+Repeti a retirada com um dedo encostado. Desta vez apareceu o aviso de cabo USB desconectado. O observador dos dispositivos virtuais confirmou a liberação dos botões e dos contatos. Na primeira amostra em que a rede apareceu ausente, a tela virtual já tinha sido retirada.
+
+A observação da rede era feita aproximadamente a cada segundo. Por isso, o teste confirma o encerramento, mas não mede com precisão o tempo físico de resposta. Os 200 ms são o intervalo configurado no programa, não uma latência medida no aparelho.
+
+### Mantendo o mesmo endereço
+
+Os endereços automáticos mudavam quando eu recriava a ancoragem. Preferi manter o endereço do aplicativo e só trocar se realmente fosse necessário.
+
+Criei um perfil no NetworkManager que mantém a configuração automática da ancoragem e acrescenta um endereço fixo para o aplicativo. A ativação verifica endereço duplicado. O perfil cabeado que já existia no computador foi preservado.
+
+A identificação usa a porta USB e o driver da conexão. Ela não depende do nome da interface, que mudou depois de reconectar. O iniciador também passou a conferir o endereço reservado, evitando trocar o link apenas porque recebeu outro endereço automático.
+
+Retirei o cabo, esperei, reconectei na mesma porta e reativei a Ancoragem USB. Mantive o Galaxy USB aberto, sem voltar à página da sessão. A imagem voltou sozinha, e o endereço do aplicativo foi mantido.
+
+Esse resultado foi conferido na mesma porta do computador, com o aplicativo aberto e a ancoragem reativada manualmente. Outra porta precisa ter a identificação revista. Se o tablet mudar a sub-rede ou houver conflito, será necessário revisar o endereço.
+
+Consultei a documentação do NetworkManager sobre [identificação da conexão](https://www.networkmanager.dev/docs/api/latest/settings-match.html) e [endereços IPv4](https://www.networkmanager.dev/docs/api/latest/settings-ipv4.html), além do [código do Android para o estado USB](https://android.googlesource.com/platform/frameworks/base/+/master/core/java/android/hardware/usb/UsbManager.java). Os endereços e a identificação da porta ficaram no registro local.
+
+---
+
+<a id="etapa-12"></a>
+
+## Etapa 12: a mudança para 90 Hz
+
+22/10/2026
+
+Percebi que a tela virtual estava em 30 Hz nas configurações do KDE. Esse era o alvo inicial usado para começar os testes de conexão e imagem.
+
+Mudei o aplicativo para 60 fps. O vídeo reiniciou e a imagem voltou, mas continuei achando lenta. Depois aumentei para 90 fps e 60 Mbps, mantendo a resolução de 1280 × 800. A fluidez melhorou muito. Com esse resultado, decidi seguir usando essa configuração e encerrar a investigação de lentidão por enquanto.
+
+### O que foi aplicado e o que foi medido
+
+Conferi a configuração do programa e o modo informado pelo KDE. Abri também um padrão animado na tela virtual para observar a captura com movimento, em vez de usar somente uma imagem parada.
+
+| Consulta | Resultado até este momento |
+| --- | --- |
+| Configuração atual | 1280 × 800, alvo de 90 fps, bitrate de 60 Mbps |
+| Modo da tela virtual no KDE | Aproximadamente 90 Hz, registrado como 89,996 Hz |
+| Captura com o padrão animado | Aproximadamente 56 a 70 quadros/s nas janelas completas de cinco segundos da rodada observada |
+| Codificação na mesma rodada | Aproximadamente 58 a 70 quadros/s nas janelas completas |
+| Avaliação após mudar para 60 fps | A imagem voltou, mas ainda pareceu lenta |
+| Avaliação de uso com 90 fps e 60 Mbps | Melhorou muito; decidi manter essa configuração |
+
+A rodada do padrão durou cerca de 45 segundos. Para as faixas acima, usei as janelas completas de cinco segundos durante o movimento; a primeira janela misturava o início do teste com o estado anterior. Esses números são da captura e do codificador, não uma medição óptica dos quadros exibidos pelo painel do tablet.
+
+Os 90 Hz foram aplicados à tela virtual, mas ainda não obtive 90 quadros por segundo constantes no caminho observado. Também não tenho uma medida do atraso completo, desde tocar com a caneta até ver o traço no tablet.
+
+Neste caminho, o codificador está em qualidade constante e recebe o bitrate como parâmetro de limite. Configurar 60 Mbps não quer dizer que todo conteúdo vá consumir essa taxa. O padrão simples transmitiu bem menos; aumentar esse valor não basta para concluir que a fluidez melhorou.
+
+A melhora no uso foi suficiente para encerrar esta investigação por enquanto. Vou manter 90 fps, 60 Mbps e o mesmo endereço de conexão. A amostra acima fica como registro do teste; não vou continuar medindo ou tentando otimizar essa parte agora. Ainda não fiz uma comparação medida com o aplicativo da Samsung no Windows em condições equivalentes.
+
+O código adaptado, os APKs e os registros brutos continuam no computador. Os testes seguem reunidos neste documento.
