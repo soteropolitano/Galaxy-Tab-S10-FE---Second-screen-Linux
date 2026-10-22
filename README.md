@@ -1,10 +1,10 @@
 # Galaxy Tab S10 FE como segunda tela no Linux
 
-Estou usando meu Galaxy Tab S10 FE como segunda tela no Kubuntu, com a S Pen e o touch funcionando pelo cabo, mantendo a depuração USB desligada.
+Estou usando meu Galaxy Tab S10 FE como segunda tela no Kubuntu, com S Pen, touch e som pelo cabo ou pelo Wi-Fi. Pelo cabo, mantenho a depuração USB desligada.
 
 Comecei com VNC, mas não gostei da experiência. Depois consegui imagem pelo “Segunda tela” da Samsung, usando o GNOME Network Displays. Funcionou em espelhamento. Para seguir com tela independente, caneta e dedos, comecei uma adaptação do [UScreen](https://github.com/majmichu1/UScreen).
 
-Agora já aparece uma tela adicional no tablet! Consegui desenhar numa área de teste no Linux, variar a espessura com a pressão da S Pen e usar até cinco dedos, com os toques alinhados. Com 90 Hz, a fluidez melhorou muito.
+Já consegui desenhar no Krita com pressão e inclinação da S Pen, apoiar a mão sem interferência nas rodadas e usar dois dedos para mover e ampliar a folha. O computador também oferece uma saída de som para o tablet. Agora a tela chegou à resolução nativa, **2304 × 1440 a 90 Hz**, e posso escolher resolução e atualização pelo PC ou pelo aplicativo.
 
 Estou deixando o processo aqui porque quero aprender durante o desenvolvimento e entender os problemas que forem aparecendo.
 
@@ -12,43 +12,55 @@ Estou deixando o processo aqui porque quero aprender durante o desenvolvimento e
 
 | Parte | O que conferi no S10 FE |
 | --- | --- |
-| Cabo sem depuração | Vídeo e entrada pela rede criada com a Ancoragem USB, sem ADB |
-| Tela independente | Área adicional de 1280 × 800 no KDE, mantendo as telas físicas |
-| S Pen | Desenho no Linux com pressão mudando a espessura do traço |
-| Inclinação e aproximação | Dados recebidos na área de teste do Linux |
-| Botão lateral | Eventos de pressionar e soltar recebidos no Linux, sem abrir menu da Samsung na rodada |
-| Touch | Até cinco dedos simultâneos, com posição alinhada |
-| Mão apoiada | Desenhei sem interferência na rodada com a caneta próxima da tela |
+| Cabo sem depuração | Vídeo, entrada e áudio pela rede criada com a Ancoragem USB, sem ADB |
+| Wi-Fi sem cabo | Tela independente, S Pen, touch e som pela rede local, sem ADB |
+| Tela independente | Área adicional no KDE, chegando a 2304 × 1440 a 90 Hz pelo Wi-Fi, mantendo as telas físicas |
+| Resolução e atualização | Escolha no KDE e no aplicativo; os controles do tablet acompanham as alterações feitas no PC |
+| S Pen no Krita | Desenho alinhado à ponta e pressão mudando a espessura pelo cabo e pelo Wi-Fi |
+| Inclinação | Traço mais grosso ao inclinar, com um pincel preparado para responder só à inclinação |
+| Botão lateral | Move a folha no Krita, como botão do meio nessa configuração |
+| Touch | Até cinco dedos na área de teste; dois dedos movem e ampliam/reduzem a folha no Krita |
+| Mão apoiada | Desenhei sem interferência nas rodadas curtas, aproximando a caneta antes de apoiar a mão |
+| Som | Saída “Galaxy Tab S10 FE (teste)” no PC, com reprodução e troca de saída conferidas por USB e Wi-Fi |
 | Retirada do cabo | Aviso de desconexão no tablet, liberação dos contatos e retirada da tela virtual |
-| Reconexão | A imagem voltou sozinha depois de reconectar na mesma porta e reativar a Ancoragem USB |
+| Reconexão USB | A imagem voltou sozinha depois de reconectar na mesma porta e reativar a Ancoragem USB |
 
-O teste com a mão apoiada foi curto e seguiu essa sequência: aproximar a caneta primeiro e manter a ponta perto da tela. Ainda preciso conferir outras situações. Também falta usar um pincel que responda à inclinação num programa de desenho de uso diário.
+Os testes de desenho no Krita foram feitos em 1280 × 800. Depois validei a imagem na resolução nativa e a troca de modos pelo Wi-Fi. As novas opções também foram preparadas para USB, mas ainda falta repetir essas trocas pelo cabo. Os testes com a mão apoiada foram curtos e não cobrem todas as posições de uso.
 
-Os detalhes, incluindo os erros até chegar aqui, estão nas [etapas 10](docs/testes.md#etapa-10) e [11](docs/testes.md#etapa-11).
+Os resultados, os erros e as correções estão no [registro dos testes](docs/testes.md).
 
-## A mudança para 90 Hz
+## Resolução e Hz agora são uma escolha
 
-A primeira imagem pelo cabo estava configurada em 30 quadros por segundo. Mudei para 60 fps; a imagem voltou, mas continuei achando lenta. Depois aumentei para 90 fps e 60 Mbps, mantendo 1280 × 800. Melhorou muito!
+A primeira imagem pelo cabo estava em 1280 × 800, com alvo de 30 fps. Mudei para 60 fps, mas continuei achando lenta. Depois aumentei para 90 fps e 60 Mbps. Melhorou muito!
 
-Conferi que o KDE aplicou aproximadamente 90 Hz à tela virtual. Vou manter essa configuração e seguir com o uso, sem continuar a investigação de fluidez agora. O registro das mudanças e da amostra de captura está na [etapa 12](docs/testes.md#etapa-12).
+1280 × 800 era a configuração inicial do teste. O aplicativo e o KDE agora oferecem:
 
-Ainda não tenho uma comparação medida com o aplicativo da Samsung no Windows.
+| Resolução | Atualização |
+| --- | --- |
+| 2304 × 1440, nativa | 30, 60 ou 90 Hz |
+| 1920 × 1200 | 30, 60 ou 90 Hz |
+| 1600 × 1000 | 30, 60 ou 90 Hz |
+| 1280 × 800 | 30, 60 ou 90 Hz |
 
-## Como está funcionando pelo cabo
+Encontrei um problema ao mudar pelo PC: a imagem mudava, mas o aplicativo continuava mostrando a escolha antiga. No teste 10 isso foi corrigido. A linha “Ativa no PC” e os controles se atualizam mesmo com as configurações do tablet abertas.
 
-A adaptação usa a rede criada pela **Ancoragem USB** do tablet. O programa Linux cria a tela com EVDI, captura e codifica H.264 pela GPU. O aplicativo Android recebe o vídeo e devolve os eventos da caneta e dos dedos ao Linux.
+Deixei 2304 × 1440 a 90 Hz e mantive os 60 Mbps. Não retomei a investigação de fluidez, e configurar 90 Hz não comprova 90 quadros exibidos por segundo em qualquer situação. Ainda não tenho uma comparação medida com o aplicativo da Samsung no Windows.
 
-Instalei o aplicativo manualmente e confirmei a sessão no tablet. O endereço usado pelo aplicativo agora fica o mesmo ao reconectar na porta testada, mesmo quando a rede recebe outro endereço automático. Não precisei ativar a depuração USB.
+## Como está funcionando
 
-A versão do UScreen que usei como base depende de ADB nesse caminho. A conexão direta pela ancoragem, os ajustes de desconexão e a configuração de endereço descritos aqui fazem parte da adaptação local.
+Pelo cabo, a adaptação usa a rede criada pela **Ancoragem USB** do tablet. Pelo Wi-Fi, o computador e o tablet ficam na mesma rede local. O programa Linux cria a tela com EVDI, captura e codifica H.264 pela GPU. O aplicativo Android recebe o vídeo e devolve os eventos da caneta e dos dedos ao Linux.
 
-O caminho sem fio continua no plano. O Miracast já deu imagem em espelhamento, mas ainda falta resolver o conflito de endereços encontrado naquele teste e investigar o retorno da S Pen e do touch pela função nativa da Samsung.
+Instalei o aplicativo manualmente e confirmei a sessão no tablet. O endereço usado pelo aplicativo fica o mesmo ao reconectar na porta USB testada, mesmo quando a rede recebe outro endereço automático. A sessão Wi-Fi usa o endereço próprio dessa rede. Não precisei ativar a depuração USB em nenhum desses testes.
+
+O som usa um canal separado. Escolho a saída do tablet nas configurações de áudio do computador. Havia um problema que repetia no tablet o áudio já enviado à caixa Bluetooth; corrigi a origem da captura e repeti a troca de saída pelo Wi-Fi e pelo cabo. O som ficou somente na saída escolhida.
+
+Essas mudanças fazem parte da adaptação local. A versão do UScreen usada como base depende de ADB no caminho USB consultado. O resultado pelo Wi-Fi descrito aqui também usa o aplicativo adaptado; o teste com o receptor nativo da Samsung continua separado.
 
 ## Como estou organizando
 
 Estou fazendo por etapas para conseguir acompanhar e entender o processo. Nesta parte preferi seguir com os testes e reunir o registro depois. Os relatórios completos ficam salvos no meu computador; aqui ficam as explicações sem os endereços da rede e o inventário do computador.
 
-Reuni as etapas no [registro dos testes](docs/testes.md), da escolha da base aos testes de desenho, desconexão, reconexão e fluidez pelo cabo.
+Reuni as etapas no [registro dos testes](docs/testes.md), incluindo cabo, Wi-Fi, áudio, Krita e a escolha de resolução e Hz.
 
 O [plano de testes](docs/plano.md) mostra o que pretendo fazer em seguida. A comparação dos projetos, os arquivos que consultei e os créditos estão nas [referências](docs/referencias.md).
 

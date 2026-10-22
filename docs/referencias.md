@@ -31,6 +31,10 @@ Na [etapa 10](testes.md#etapa-10), compilei e adaptei essa base para usar a anco
 
 A [etapa 11](testes.md#etapa-11) registra as correções de desconexão, a liberação dos contatos e a reconexão mantendo o endereço do aplicativo. A [etapa 12](testes.md#etapa-12) registra a melhora de fluidez percebida ao configurar 90 fps e 60 Mbps. Esses resultados são da adaptação local; não atribuem ao projeto original as mudanças feitas aqui.
 
+Depois confirmei tela e entrada pela rede Wi-Fi sem cabo, acrescentei a saída de áudio e corrigi a captura ao trocar de saída. Os testes estão nas [etapas 13 e 14](testes.md#etapa-13). O áudio descrito aqui foi acrescentado na adaptação; não existia na versão da base consultada.
+
+Nas [etapas 15 e 16](testes.md#etapa-15), usei pressão, inclinação, botão lateral e gestos de dois dedos no Krita pelo cabo e pelo Wi-Fi. Na [etapa 17](testes.md#etapa-17), acrescentei os modos de resolução e Hz ao KDE e ao aplicativo e corrigi a sincronização dos controles depois de uma alteração no PC.
+
 Preservei os créditos e a [licença MIT do UScreen](https://github.com/majmichu1/UScreen/blob/66f6bcdab918b8dcc44227dde00197f30a778c44/LICENSE) na cópia local. O código adaptado e os APKs ainda não foram publicados neste repositório.
 
 ## TethrLink e o artigo sobre USB
@@ -96,6 +100,14 @@ Para acompanhar essa parte, estou usando a [documentação de caneta do Android]
 Consultei o [estado USB no código do Android](https://android.googlesource.com/platform/frameworks/base/+/master/core/java/android/hardware/usb/UsbManager.java) para o aviso de retirada do cabo. O comportamento foi conferido no S10 FE com o aplicativo de teste 6.
 
 Para manter o endereço, usei a documentação do NetworkManager sobre [identificação de conexões](https://www.networkmanager.dev/docs/api/latest/settings-match.html) e [configuração IPv4](https://www.networkmanager.dev/docs/api/latest/settings-ipv4.html). O perfil combina a rede automática com um endereço adicional e reconhece a porta USB e o driver. A reconexão foi testada nessa mesma porta.
+
+## Áudio, Krita e resolução nativa
+
+A [documentação do PipeWire](https://docs.pipewire.org/page_man_pipewire-props_7.html) ajudou a fixar a origem da captura: `node.dont-move`, `node.dont-reconnect` e `node.dont-fallback`. Essas opções ficaram no capturador da adaptação, junto da conferência da origem real; não alterei a política global do computador. No Android, a reprodução usa o [AudioTrack](https://developer.android.com/reference/android/media/AudioTrack), sem acesso ao microfone.
+
+Para o pincel de inclinação, consultei a [API de presets do Krita](https://api.kde.org/legacy/krita/html/classPreset.html) e os [sensores de caneta](https://docs.krita.org/en/reference_manual/brushes/brush_settings/tablet_sensors.html). O teste separou o dado recebido do efeito visível no traço, usando tamanho controlado só pela inclinação. A [configuração das ações sobre a tela](https://docs.krita.org/en/reference_manual/preferences/canvas_input_settings.html) também ajuda a entender o movimento da folha pelo botão lateral.
+
+As [especificações do S10 FE na Samsung](https://www.samsung.com/uk/tablets/galaxy-tab-s/galaxy-tab-s10-fe-blue-128gb-wi-fi-sm-x520nlbreub/) informam 2304 × 1440 e 90 Hz. A imagem nessa resolução foi conferida por Wi-Fi, assim como a escolha de modos no KDE e no aplicativo. O EDID gerado passou na verificação de conformidade; isso não substitui uma medição de desempenho do caminho completo.
 
 ## Versões consultadas
 

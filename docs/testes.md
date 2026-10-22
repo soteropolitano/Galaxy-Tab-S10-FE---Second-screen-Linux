@@ -1,10 +1,10 @@
 # Testes do Galaxy Tab S10 FE no Linux
 
-Reuni aqui os registros que estavam separados por etapa. O caminho começou pelo Miracast e chegou à tela independente pelo cabo, com a depuração USB desligada, S Pen e touch no Linux.
+Reuni aqui os registros que estavam separados por etapa. O caminho começou pelo Miracast e chegou à tela independente pelo cabo e pelo Wi-Fi, com S Pen, touch e som no Linux. A depuração USB continua desligada.
 
 Os relatos seguem a ordem em que fiz os testes, com os erros, as correções e o que ainda faltava em cada momento. As pendências dos primeiros relatos devem ser lidas como o estado daquela tentativa. As continuações mostram o que consegui resolver depois.
 
-Até 22/10/2026, já consegui desenhar com pressão, usar até cinco dedos e reconectar automaticamente após retirar e recolocar o cabo. Depois de mudar para 90 fps e 60 Mbps, percebi uma melhora grande na fluidez e decidi manter a configuração.
+Até 22/10/2026, consegui usar o Krita pelo cabo e pelo Wi-Fi, com pressão, inclinação, botão lateral e gestos de dois dedos. O som e a troca de saída também funcionaram pelos dois caminhos. Depois dos testes iniciais em 1280 × 800, a imagem chegou a 2304 × 1440 a 90 Hz, com resolução e atualização selecionáveis no PC e no aplicativo.
 
 1. [Etapa 01: escolhendo a base](#etapa-01)
 2. [Etapa 02: compilando e abrindo](#etapa-02)
@@ -18,6 +18,11 @@ Até 22/10/2026, já consegui desenhar com pressão, usar até cinco dedos e rec
 10. [Etapa 10: o aplicativo conectou sem ADB](#etapa-10)
 11. [Etapa 11: retirar o cabo e conectar de novo](#etapa-11)
 12. [Etapa 12: a mudança para 90 Hz](#etapa-12)
+13. [Etapa 13: Wi-Fi sem cabo](#etapa-13)
+14. [Etapa 14: som e troca de saída](#etapa-14)
+15. [Etapa 15: Krita pelo cabo](#etapa-15)
+16. [Etapa 16: Krita pelo Wi-Fi](#etapa-16)
+17. [Etapa 17: resolução, Hz e sincronização](#etapa-17)
 
 ---
 
@@ -431,3 +436,148 @@ Neste caminho, o codificador está em qualidade constante e recebe o bitrate com
 A melhora no uso foi suficiente para encerrar esta investigação por enquanto. Vou manter 90 fps, 60 Mbps e o mesmo endereço de conexão. A amostra acima fica como registro do teste; não vou continuar medindo ou tentando otimizar essa parte agora. Ainda não fiz uma comparação medida com o aplicativo da Samsung no Windows em condições equivalentes.
 
 O código adaptado, os APKs e os registros brutos continuam no computador. Os testes seguem reunidos neste documento.
+
+---
+
+<a id="etapa-13"></a>
+
+## Etapa 13: a tela continuou pelo Wi-Fi, sem cabo
+
+22/10/2026
+
+Conectei computador e tablet à mesma rede Wi-Fi e comecei abrindo no tablet uma página servida pelo computador. Depois instalei o aplicativo de teste 7 e confirmei a sessão sem fio. Apareceu imagem.
+
+Retirei o cabo com o aplicativo aberto. A imagem continuou, e consegui desenhar com pressão da S Pen. Numa rodada separada, com a caneta afastada, os dedos deixaram marcas alinhadas. No computador, conferi que vídeo e controle estavam usando a rede Wi-Fi e que não havia rede USB ativa.
+
+Na área de teste chegaram 1.102 eventos de caneta, com 27 contatos completos da ponta, aproximação e pressão variável. O registro dos dedos teve 2.120 eventos, até cinco contatos simultâneos e nenhum contato restante ao terminar.
+
+### O que mudou
+
+A sessão passou a distinguir USB e Wi-Fi. No modo sem fio, retirar o cabo não encerra a conexão. O programa Linux ganhou a conexão direta pela rede local, sem o caminho Wi-Fi por ADB da base consultada. Mantive os links USB anteriores, a confirmação no tablet, a autorização da sessão e a restrição ao tablet selecionado.
+
+A conexão desta versão usa TCP/WebSocket, sem uma camada de criptografia adicionada. Fiz a rodada na rede Wi-Fi compartilhada entre os aparelhos, mantendo a depuração USB desligada.
+
+O teste manteve 1280 × 800, alvo de 90 fps e 60 Mbps. Passaram 41 testes Rust e sete testes Android, e a assinatura do APK foi conferida. O endereço reservado para o USB foi preservado; o Wi-Fi usa o endereço próprio dessa rede. Não testei troca de roteador ou suspensão prolongada.
+
+---
+
+<a id="etapa-14"></a>
+
+## Etapa 14: som no tablet e o problema ao trocar de saída
+
+22/10/2026
+
+Queria que o computador reconhecesse o tablet como uma saída de áudio. Acrescentei um canal separado para o som e a recepção no aplicativo Android de teste 8; essa transmissão não existia na versão do UScreen consultada.
+
+Ao conectar o tablet ao canal autenticado, o programa cria a saída temporária **Galaxy Tab S10 FE (teste)** no PipeWire. Escolho essa saída nas configurações de som do PC. O transmissor capta o monitor dessa saída virtual e envia PCM estéreo, 48 kHz e 16 bits, ao aplicativo, que reproduz pelo AudioTrack. O aplicativo não pede acesso ao microfone.
+
+### Primeiro teste e o erro que apareceu no uso
+
+Antes de usar o tablet, conferi o áudio com um cliente simulado e tons diferentes nos dois canais. A autorização inválida não criou saída, uma segunda sessão foi recusada e o encerramento retirou a saída virtual. A saída padrão do computador foi preservada. Passaram dez testes Android, incluindo o cabeçalho de áudio recebido em partes e a compatibilidade com os links anteriores.
+
+Instalei o teste 8. A imagem voltou, a saída apareceu no PC e ouvi no tablet o som curto enviado somente para ela, pelo Wi-Fi.
+
+Depois usei o Spotify. Ao mudar do tablet para a caixa Bluetooth, o som continuou nos dois. A conferência mostrou que o Spotify já estava na saída escolhida. O capturador é que tinha sido redirecionado para o monitor da caixa e estava reenviando esse áudio ao tablet.
+
+### A correção e a repetição
+
+O capturador ganhou uma identificação própria e passou a solicitar que sua origem não seja movida, religada a outro dispositivo ou substituída pela origem padrão. Também passei a conferir a origem real antes de enviar áudio e durante a sessão. Se ela deixar de ser o monitor da saída virtual, o envio é encerrado. Não alterei a política global de áudio do computador.
+
+Repeti o caso com duas saídas virtuais e um tom sintético. Ao mover o aplicativo de teste para a outra saída, o canal do tablet passou a receber silêncio. A captura permaneceu no monitor correto, sem mudar a saída padrão nem as rotas dos outros aplicativos.
+
+No uso com Spotify, a troca pelo Wi-Fi passou a deixar o som somente na caixa escolhida. Depois reconectei o cabo, reativei a Ancoragem USB com a depuração desligada e confirmei imagem e saída de som. Os canais de vídeo, entrada e áudio estavam pela rede USB. O Spotify tocou no tablet quando escolhi essa saída e somente na caixa ao mudar novamente.
+
+A correção foi no computador; não precisei reinstalar o aplicativo para repeti-la. Assim, áudio e troca de saída ficaram confirmados pelo Wi-Fi e pelo cabo. Ainda faltam reprodução prolongada e uma medida de sincronização entre áudio e vídeo.
+
+---
+
+<a id="etapa-15"></a>
+
+## Etapa 15: desenhando no Krita pelo cabo
+
+22/10/2026
+
+Abri o Krita portátil 5.3.4.1 na tela do tablet, com um perfil separado para os testes. Ele usou XWayland dentro da sessão Wayland do KDE. Mantive 1280 × 800, 90 fps e 60 Mbps, com USB sem depuração.
+
+Com o pincel **Basic-5 Size**, o desenho acompanhou a ponta da S Pen e a espessura variou entre traços leves e fortes.
+
+### A inclinação precisava aparecer no desenho
+
+Na primeira tentativa, com **Pencil-5 Tilted**, não percebi diferença ao inclinar. Os dados de inclinação chegavam ao Krita, mas isso ainda não confirmava um efeito visível no traço.
+
+Preparei uma folha separada e um pincel redondo chamado **Teste de inclinacao Galaxy**. Nele, o tamanho depende só da inclinação; a pressão não controla tamanho, opacidade nem fluxo. A diferença foi ampliada para facilitar a comparação.
+
+O traço ficou mais grosso ao inclinar a caneta. Assim, consegui confirmar o uso da inclinação no desenho. A configuração do pincel faz diferença: receber o dado não significa que todo pincel vá usá-lo da mesma forma.
+
+### Mão apoiada, botão e dedos
+
+Aproximei a S Pen, apoiei a mão e desenhei. Não percebi marcas da mão, deslocamento da folha ou interrupção nessa rodada. Isso ainda não cobre todas as posições de apoio ou sessões longas.
+
+O botão lateral arrastou a folha. No Krita, ele chegou como botão do meio, que nessa configuração aciona esse movimento. Depois afastei a caneta e usei dois dedos para mover a folha e ampliar e reduzir o desenho. Funcionou.
+
+Os desenhos foram salvos e a integridade dos arquivos foi conferida. Os registros de eventos Qt podem ter repetições ao passar por diferentes objetos da interface; suas contagens não foram tratadas como número de traços ou cliques físicos.
+
+---
+
+<a id="etapa-16"></a>
+
+## Etapa 16: repetindo o Krita pelo Wi-Fi
+
+22/10/2026
+
+Retirei o cabo e conectei o aplicativo pelo mesmo endereço Wi-Fi usado antes, sem reinstalar. A folha do Krita apareceu. Conferi no computador que vídeo e entrada usavam o Wi-Fi, sem interface de rede USB ativa.
+
+Repeti o desenho com pressão e com a mão apoiada. O traço ficou alinhado, variou de espessura e a mão não interferiu nessa rodada. Com o mesmo pincel de diagnóstico da etapa anterior, o traço ficou mais grosso ao inclinar a S Pen.
+
+O botão lateral continuou movendo a folha. Com a caneta afastada, os gestos de dois dedos também moveram e ampliaram/reduziram o desenho.
+
+Essas funções do Krita ficaram confirmadas pelo cabo e pelo Wi-Fi, nas rodadas em 1280 × 800. O desenho foi salvo e os monitores físicos foram preservados. Ainda não foi uma avaliação de uso prolongado nem uma nova investigação de desempenho.
+
+---
+
+<a id="etapa-17"></a>
+
+## Etapa 17: escolher resolução e Hz no PC e no aplicativo
+
+22/10/2026
+
+Percebi que a tela continuava limitada à configuração inicial de 1280 × 800. O S10 FE vai além disso: a resolução nativa é **2304 × 1440**, com tela de 90 Hz. Pedi também a escolha de resolução e atualização nas configurações do PC e do aplicativo.
+
+### Por que o KDE só mostrava um modo
+
+O programa entregava ao Linux uma identificação de monitor com um único modo. Essa identificação é o EDID, que informa ao sistema quais resoluções e taxas a tela oferece.
+
+O catálogo passou a anunciar as combinações abaixo, sem perder a opção nativa quando uma resolução menor é escolhida:
+
+| Resolução | Atualização |
+| --- | --- |
+| 2304 × 1440, nativa | 30, 60 ou 90 Hz |
+| 1920 × 1200 | 30, 60 ou 90 Hz |
+| 1600 × 1000 | 30, 60 ou 90 Hz |
+| 1280 × 800 | 30, 60 ou 90 Hz |
+
+O KDE também apresenta modos básicos de 640 × 480 para compatibilidade do formato. As opções principais para este teste são as da tabela. Corrigi também a informação do tamanho físico no EDID, usada pelo sistema no cálculo da densidade da tela.
+
+A captura e o codificador passaram a acompanhar o modo escolhido no KDE, incluindo uma troca só de Hz. O aplicativo ganhou a opção **Nativa do tablet**, as resoluções menores e a escolha de 30, 60 ou 90 Hz.
+
+### A imagem mudava, mas o aplicativo mostrava a escolha antiga
+
+Instalei o teste 9 e a imagem voltou em 2304 × 1440 a 90 Hz. O KDE reconheceu as doze combinações principais. Mudei pelo computador para 1920 × 1200 e 60 Hz: a imagem continuou, e o codificador acompanhou esses valores. Depois voltei à nativa com 90 Hz pelo aplicativo.
+
+Encontrei então outra falha. Ao mudar pelo PC, a imagem mudava, mas o aplicativo continuava mostrando “nativa” e 90 Hz. Ele exibia a preferência salva, sem receber o modo realmente ativo.
+
+No **teste 10**, o computador passou a enviar o modo ativo pelo canal autenticado. A linha **Ativa no PC**, as escolhas de resolução e Hz e as preferências de reconexão passaram a acompanhar esse estado. Receber o aviso não faz o aplicativo enviar automaticamente o mesmo comando de volta.
+
+Instalei a atualização e repeti a mudança para 1920 × 1200 e 60 Hz com as configurações do tablet abertas. Os valores mudaram sozinhos, sem fechar e abrir a janela.
+
+### Como terminou a rodada
+
+Voltei a 2304 × 1440 a 90 Hz, mantendo 60 Mbps. O modo do KDE e o codificador foram conferidos, e as configurações dos monitores físicos foram preservadas.
+
+Passaram 43 testes Rust e 16 testes Android. O teste do canal autenticado conferiu o modo inicial, uma mudança de resolução e uma mudança apenas dos Hz. O EDID passou na verificação de conformidade, e a assinatura do APK foi conferida como compatível com as atualizações anteriores.
+
+A validação no aparelho foi pelo Wi-Fi, sem cabo. As configurações USB foram preparadas para os novos modos, mas ainda falta repetir essas trocas pelo cabo. Os testes completos de desenho anteriores foram em 1280 × 800; ainda quero repeti-los na resolução nativa.
+
+Configurar 90 Hz e o codificador a 90 fps não comprova que todos os quadros serão exibidos nessa taxa em qualquer situação. Não retomei a investigação de fluidez nem fiz comparação medida com o aplicativo da Samsung no Windows.
+
+O código adaptado, os APKs, os desenhos e os relatórios completos continuam salvos no computador. Os testes seguem reunidos neste documento.
