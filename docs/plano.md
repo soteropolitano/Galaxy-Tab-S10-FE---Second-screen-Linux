@@ -38,4 +38,10 @@ O código adaptado e os APKs continuam no computador. Ainda preciso organizar a 
 
 O Miracast transmitiu imagem em espelhamento. Nesse caminho ainda faltam resolver a colisão de endereços e investigar tela independente e retorno da caneta e dos dedos. O Wi-Fi já confirmado neste projeto usa o aplicativo adaptado.
 
+## Conferir as outras opções do UScreen
+
+Ainda faltam testar o modo mesa digitalizadora, rotação, todas as posições automáticas, alternância do comportamento do cursor, outros codificadores, redução da escala de transmissão, tela preta, touch desligado, vários tablets, troca automática entre USB e Wi-Fi e os avisos de atualização. Reuni os limites de cada ponto na [conferência do UScreen](testes.md#conferencia-uscreen).
+
+A segurança também precisa de uma revisão própria, porque a Ancoragem USB e o Wi-Fi usam rede, enquanto o caminho USB original usa ADB e portas locais. A autorização por token já usada não substitui criptografia ou uma auditoria completa. Os números de desempenho e o comparativo de alternativas do original continuam como referências, sem tratar esses dados como medições minhas.
+
 Os testes e as correções continuam no [registro único](testes.md). Os relatórios completos ficam salvos no meu computador.

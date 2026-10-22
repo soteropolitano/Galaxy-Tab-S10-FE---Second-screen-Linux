@@ -598,3 +598,71 @@ Queria um nome que também ajudasse a encontrar o projeto ao pesquisar sobre tab
 A atualização do aplicativo com o nome novo foi preparada como teste 11. O nome aparece na abertura, na lista de aplicativos e na notificação da conexão. A identificação da bandeja do PC também foi atualizada. A instalação e a assinatura foram mantidas compatíveis com as versões anteriores, para atualizar o app existente.
 
 Os créditos e a licença do UScreen continuam preservados. Os testes de conexão, desenho, áudio e modos de tela anteriores continuam registrados acima. Instalei o teste 11 no S10 FE e confirmei que o aplicativo aparece como **Galaxy Tab Screen**. O APK continua disponível apenas nas páginas locais de teste, sem publicação no GitHub.
+
+---
+
+<a id="conferencia-uscreen"></a>
+
+## O que já confirmei do UScreen e o que ainda falta
+
+22/10/2026
+
+Voltei à documentação do UScreen para conferir se já tinha testado tudo o que ele oferece. Ainda não. Usar o projeto como base não confirma automaticamente as mesmas funções, a segurança ou o desempenho na minha adaptação.
+
+### O que já funcionou no S10 FE
+
+| Parte | O que consegui confirmar |
+| --- | --- |
+| Segunda tela | Área independente no KDE, sem adaptador HDMI fictício |
+| Conexão | USB pela Ancoragem USB com a depuração desligada; Wi-Fi funcionando sem cabo |
+| S Pen | Posição, pressão, inclinação, aproximação e botão lateral; pressão e inclinação também produziram efeito visível no Krita |
+| Touch | Contatos alinhados, até cinco dedos na área de teste e gestos de dois dedos no Krita |
+| Mão apoiada | Desenho sem interferência nas rodadas curtas pelo cabo e pelo Wi-Fi |
+| Vídeo por GPU | H.264 com VAAPI na Intel usada nos testes |
+| Som | Saída do tablet no PC e troca de saída funcionando por USB e Wi-Fi depois da correção |
+| Modos de tela | Imagem nativa de 2304 × 1440 a 90 Hz e troca para 1920 × 1200 a 60 Hz pelo Wi-Fi |
+| Configurações sincronizadas | Mudanças feitas no KDE apareceram no aplicativo, inclusive com a engrenagem aberta |
+| Reconexão USB | A imagem voltou sozinha após reconectar na mesma porta e reativar a Ancoragem USB |
+
+Os desenhos completos no Krita foram em 1280 × 800. A validação dos novos modos de tela veio depois, pelo Wi-Fi. Ainda preciso repetir o desenho na resolução nativa e conferir as trocas de resolução e Hz pelo cabo. Antes desta pausa, reconectei o cabo e ativei a Ancoragem USB; o endereço fixo foi reconhecido, mas a rodada de troca de modos ainda não começou.
+
+### A segurança mudou com o transporte
+
+O [SECURITY.md do UScreen](https://github.com/majmichu1/UScreen/blob/main/SECURITY.md) descreve portas locais acessadas pelo tablet através do ADB. Escolhi outro caminho: a rede da Ancoragem USB e a rede Wi-Fi. Por isso, a descrição de portas acessíveis apenas pelo próprio computador não se aplica integralmente ao Galaxy Tab Screen.
+
+A adaptação usa token de sessão e restrições ao endereço do tablet nas sessões preparadas. Isso não substitui criptografia: ainda não adicionei essa camada ao transporte nem concluí uma auditoria de segurança. O app funciona sem conta. Também não fiz uma verificação completa das dependências e do tráfego para afirmar que não existe telemetria em toda a solução.
+
+A assinatura das atualizações locais foi conferida como compatível entre os testes. Isso ainda não é uma preparação de distribuição pública nem valida todos os procedimentos de instalação e remoção do projeto original.
+
+### Os números de desempenho são do projeto original
+
+As medições publicadas usaram outra GPU, outro tablet e USB por ADB. A minha conexão por cabo usa Ancoragem USB, e o vídeo usa Intel VAAPI. Não medi aqui aqueles mesmos tempos.
+
+O [método dos benchmarks](https://github.com/majmichu1/UScreen/blob/main/docs/benchmarks.md) começa na saída do codificador e termina no aviso de exibição do Android. Ele exclui a captura anterior e não mede sozinho todo o atraso entre mexer a caneta e enxergar o traço.
+
+Percebi uma melhora grande ao mudar para 90 Hz e mantive 60 Mbps. A investigação de fluidez continua encerrada por minha escolha. Não vou apresentar os tempos do UScreen nem 90 quadros efetivamente exibidos por segundo como resultados que medi no S10 FE.
+
+### Configurações que ainda preciso testar
+
+| Parte | O que falta |
+| --- | --- |
+| Mesa digitalizadora | Usar só a entrada da caneta, sem transmitir imagem |
+| Posição | Conferir as escolhas automáticas à direita, esquerda, acima e abaixo |
+| Mouse e caneta | Comparar o comportamento ao alternar a opção de movimentação do cursor |
+| Orientação | Rotação pelo sensor e as duas orientações fixas da câmera |
+| Outros codificadores | HEVC, NVENC, x264 e vídeo de 10 bits |
+| Escala da transmissão | Comparar a redução de pixels e a qualidade; nenhum ganho de tempo específico foi medido aqui |
+| GPU | Escolha manual e detecção em um computador com mais de uma GPU |
+| Tela preta e touch desligado | Conferir essas opções no modo mesa digitalizadora |
+| Vários tablets | Mais de uma tela e preferências individuais por aparelho |
+| Troca de transporte | Preferência automática pelo cabo e passagem entre USB e Wi-Fi; a reconexão USB já testada não cobre isso |
+| Atualizações | Avisos e desativação da consulta no app, na interface do PC e na bandeja |
+| Borracha | Conferir se o aparelho envia esse evento e se ele chega ao programa de desenho |
+
+A tabela de alternativas do UScreen também serve como referência documental. Não comparei todos os aplicativos no mesmo computador e tablet, então ela não é um comparativo experimental deste projeto.
+
+O código adaptado e os APKs continuam locais, com os créditos e a licença MIT da base preservados. Não publiquei um aplicativo pronto para uso.
+
+### Onde parei
+
+Vou continuar pela troca de resolução e Hz e pela sincronização entre KDE e aplicativo usando o cabo, sem depuração USB. Depois quero repetir os testes de desenho na resolução nativa e seguir com as pendências acima. Os testes anteriores continuam neste mesmo arquivo.

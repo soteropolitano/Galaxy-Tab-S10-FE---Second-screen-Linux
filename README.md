@@ -31,7 +31,7 @@ Estou deixando o processo aqui porque quero aprender durante o desenvolvimento e
 
 Os testes de desenho no Krita foram feitos em 1280 × 800. Depois validei a imagem na resolução nativa e a troca de modos pelo Wi-Fi. As novas opções também foram preparadas para USB, mas ainda falta repetir essas trocas pelo cabo. Os testes com a mão apoiada foram curtos e não cobrem todas as posições de uso.
 
-Os resultados, os erros e as correções estão no [registro dos testes](docs/testes.md).
+Os resultados, os erros e as correções estão no [registro dos testes](docs/testes.md). Também reuni [o que já conferi do UScreen e o que ainda falta](docs/testes.md#conferencia-uscreen). As medições de desempenho e a descrição de segurança do projeto original não são validações desta adaptação.
 
 ## Resolução e Hz agora são uma escolha
 
@@ -68,4 +68,4 @@ Reuni as etapas no [registro dos testes](docs/testes.md), incluindo cabo, Wi-Fi,
 
 O [plano de testes](docs/plano.md) mostra o que pretendo fazer em seguida. A comparação dos projetos, os arquivos que consultei e os créditos estão nas [referências](docs/referencias.md).
 
-Este repositório reúne a documentação. O código adaptado e os APKs de teste ainda estão no computador; não publiquei uma versão pronta para uso. A adaptação parte do [UScreen](https://github.com/majmichu1/UScreen/tree/66f6bcdab918b8dcc44227dde00197f30a778c44), com os créditos e a licença MIT preservados na cópia local. A base Miracast continua sendo o [GNOME Network Displays](https://gitlab.gnome.org/GNOME/gnome-network-displays), no commit `c305023f1e6d8ab48d18c66a4efbd18e1df7cdee`, sem mudanças no código.
+Este repositório reúne a documentação. Os APKs ficam apenas nas páginas locais de teste e não serão disponibilizados no GitHub. O código adaptado e os APKs de teste ainda estão no computador; não publiquei uma versão pronta para uso. A adaptação parte do [UScreen](https://github.com/majmichu1/UScreen/tree/66f6bcdab918b8dcc44227dde00197f30a778c44), com os créditos e a licença MIT preservados na cópia local. A base Miracast continua sendo o [GNOME Network Displays](https://gitlab.gnome.org/GNOME/gnome-network-displays), no commit `c305023f1e6d8ab48d18c66a4efbd18e1df7cdee`, sem mudanças no código.
