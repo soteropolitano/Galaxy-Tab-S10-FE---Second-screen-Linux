@@ -1,5 +1,8 @@
 # Galaxy Tab Screen — Samsung Galaxy Tab como segunda tela no Linux
 
+
+[![Capa do Galaxy Tab Screen para Linux](linkedin-cover-galaxy-tab-screen-linux.jpg)](linkedin-cover-galaxy-tab-screen-linux.jpg)
+
 O **Galaxy Tab Screen** é o projeto que estou desenvolvendo para usar meu Samsung Galaxy Tab como segunda tela no Linux. Os testes são com um **Galaxy Tab S10 FE no Kubuntu/KDE Plasma**.
 
 Já uso a tela independente com S Pen, touch e som pelo cabo ou pelo Wi-Fi. Pelo cabo, mantenho a depuração USB desligada.
